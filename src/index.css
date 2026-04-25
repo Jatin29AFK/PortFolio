@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #020617;
+  color: white;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.ai-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glow-card {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.08);
+  backdrop-filter: blur(18px);
+}
