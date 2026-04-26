@@ -4,6 +4,10 @@ An interactive portfolio built to present my work as an AI/ML Engineer through p
 
 This portfolio is designed to feel like an AI product, not a static resume site.
 
+## Live Link 
+
+https://port-folio-alpha-black.vercel.app
+
 ## Live Focus
 
 - AI/ML engineering profile
@@ -32,42 +36,13 @@ This portfolio is designed to feel like an AI product, not a static resume site.
 
 Applicant-focused NLP project that helps users compare resumes with job descriptions, identify skill gaps, understand ATS alignment, and receive grounded improvement suggestions.
 
-Core ideas:
-
-- Resume and JD parsing
-- NLP preprocessing
-- TF-IDF
-- Cosine similarity
-- Skill-gap analysis
-- ATS audit
-- Gemini-based explanation layer
-
 ### 2. Nexora | RAG Study Assistant
 
 RAG-based study assistant for PDFs and URLs that supports grounded question answering and quiz generation.
 
-Core ideas:
-
-- PDF and URL ingestion
-- Chunking
-- FAISS vector retrieval
-- BM25 keyword retrieval
-- Cross-Encoder reranking
-- Grounded answer generation
-- Quiz generation
-
 ### 3. IoT Digital Twin for Smart Storage
 
 Research-oriented project focused on IoT telemetry, Azure IoT concepts, and digital twin modeling for post-harvest storage monitoring.
-
-Core ideas:
-
-- Sensor telemetry
-- Edge gateway thinking
-- Azure IoT Hub
-- Digital twin modeling
-- Condition monitoring
-- ML analysis direction
 
 ## Tech Stack
 
@@ -214,7 +189,7 @@ Instead of behaving like a normal portfolio or resume page, this project present
 ## Contact
 
 Jatin Shukla  
-AI/ML Engineer  
+Senior AI/ML Engineer  
 Noida, India
 
 - Email: shukla.jeetu2550@gmail.com
