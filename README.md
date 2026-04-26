@@ -1,73 +1,226 @@
-# React + TypeScript + Vite
+# Jatin Shukla | AI/ML Engineer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive portfolio built to present my work as an AI/ML Engineer through project case studies, animated system flows, recruiter-friendly summaries, research work, and an AI-style portfolio assistant.
 
-Currently, two official plugins are available:
+This portfolio is designed to feel like an AI product, not a static resume site.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Focus
 
-## React Compiler
+- AI/ML engineering profile
+- RAG and NLP project showcase
+- Agentic AI and full-stack AI positioning
+- Detailed case-study presentation
+- Research publication and system-design thinking
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Highlights
 
-## Expanding the ESLint configuration
+- Interactive 3D AI hero scene built with React Three Fiber and Drei
+- AI-style "Ask My Portfolio" assistant for quick portfolio queries
+- Project case studies with detailed workflows, concepts, tech stack, and reasoning
+- Demo video previews for HireFit and Nexora
+- Research project presentation for IoT Digital Twin work with attached paper
+- Systems Lab section combining project workflows and architecture thinking
+- Recruiter-focused section with role fit, timeline, locations, and strengths
+- Dynamic animated background and AI-themed motion design
+- Light and dark mode
+- SEO and social metadata
+- Vercel Analytics and Speed Insights integration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Featured Projects
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1. HireFit | AI Resume and Job Matcher
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Applicant-focused NLP project that helps users compare resumes with job descriptions, identify skill gaps, understand ATS alignment, and receive grounded improvement suggestions.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Core ideas:
+
+- Resume and JD parsing
+- NLP preprocessing
+- TF-IDF
+- Cosine similarity
+- Skill-gap analysis
+- ATS audit
+- Gemini-based explanation layer
+
+### 2. Nexora | RAG Study Assistant
+
+RAG-based study assistant for PDFs and URLs that supports grounded question answering and quiz generation.
+
+Core ideas:
+
+- PDF and URL ingestion
+- Chunking
+- FAISS vector retrieval
+- BM25 keyword retrieval
+- Cross-Encoder reranking
+- Grounded answer generation
+- Quiz generation
+
+### 3. IoT Digital Twin for Smart Storage
+
+Research-oriented project focused on IoT telemetry, Azure IoT concepts, and digital twin modeling for post-harvest storage monitoring.
+
+Core ideas:
+
+- Sensor telemetry
+- Edge gateway thinking
+- Azure IoT Hub
+- Digital twin modeling
+- Condition monitoring
+- ML analysis direction
+
+## Tech Stack
+
+### Frontend
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- GSAP
+
+### 3D and Motion
+
+- Three.js
+- React Three Fiber
+- Drei
+
+### Backend / Data / Services
+
+- Supabase
+- Vercel Analytics
+- Vercel Speed Insights
+
+### AI / ML / Retrieval Concepts Represented
+
+- Machine Learning
+- Deep Learning
+- NLP
+- RAG
+- Information Retrieval
+- Semantic Search
+- TF-IDF
+- Cosine Similarity
+- FAISS
+- BM25
+- Cross-Encoder reranking
+- AI Agents
+- Agentic AI workflows
+
+## Portfolio Sections
+
+- Hero section with animated AI scene
+- About section with AI/ML specialization areas
+- Project case studies
+- Systems Lab
+- Skills
+- Recruiter summary
+- GitHub activity
+- Experience and research timeline
+- Contact section
+- Portfolio assistant
+
+## Project Structure
+
+```text
+.
+├── public
+│   ├── Resume
+│   ├── projects
+│   └── videos
+├── src
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   └── supabase.ts
+├── index.html
+├── package.json
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Local Setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 1. Clone the repository
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/Jatin29AFK/PortFolio.git
+cd PortFolio
 ```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Add environment variables
+
+Create a `.env.local` file:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+The portfolio still runs without Supabase, but the contact form will stay inactive until these are configured.
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+### 5. Build for production
+
+```bash
+npm run build
+```
+
+### 6. Lint the project
+
+```bash
+npm run lint
+```
+
+## Deployment
+
+This portfolio is intended to be deployed on Vercel.
+
+Recommended flow:
+
+1. Push changes to GitHub
+2. Connect the repository to Vercel
+3. Add the required environment variables in Vercel
+4. Redeploy
+
+## Assets Included
+
+- Professional profile image
+- Resume PDF
+- Research paper PDF
+- Project screenshots
+- Demo videos for HireFit and Nexora
+
+## Why This Portfolio Is Different
+
+Instead of behaving like a normal portfolio or resume page, this project presents my profile as an AI product experience:
+
+- projects are shown as systems, not just cards
+- workflows are visualized
+- recruiter information is quick to scan
+- research work is given proper context
+- an assistant helps visitors navigate my profile
+
+## Contact
+
+Jatin Shukla  
+AI/ML Engineer  
+Noida, India
+
+- Email: shukla.jeetu2550@gmail.com
+- LinkedIn: https://www.linkedin.com/in/jatin-shukla-401739202/
+- GitHub: https://github.com/Jatin29AFK
+
+## License
+
+This project is for personal portfolio use.
