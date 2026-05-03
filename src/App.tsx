@@ -76,7 +76,7 @@ type MotionSystem = {
   stack: string[];
 };
 
-const resumePath = "/Resume/Resume_Jatin_Shukla.pdf";
+const resumePath = "/Resume/JatinShukla_resume.pdf";
 const profilePhotoPath = "/Resume/1774121399635.png";
 const email = "shukla.jeetu2550@gmail.com";
 const phone = "+91-9116237146";
@@ -92,6 +92,125 @@ const navLinks = [
 ];
 
 const projects: Project[] = [
+  {
+    id: "agentflow",
+    title: "AgentFlow - Multi-Agent AI Platform",
+    shortTitle: "AgentFlow",
+    desc: "Full-stack multi-agent AI orchestration platform with a FastAPI + LangGraph backend, Groq-powered agents, React dashboard, SQLite memory, reviewer scoring, human review, trace history, and workspace isolation.",
+    problem:
+      "Most AI apps stop at a single LLM response, but realistic agent systems need planning, specialist routing, deterministic tools, memory retrieval, quality checks, human approval, traceability, and isolated user workspaces.",
+    why:
+      "I built AgentFlow to showcase practical AI engineering beyond a basic chatbot: supervisor-led multi-agent routing, memory-aware generation, backend tools, human-in-the-loop review, and a polished dashboard for observing the workflow.",
+    users: [
+      "Developers experimenting with multi-agent workflow orchestration and agent collaboration patterns.",
+      "AI product builders who need a clear interface for agent planning, execution traces, memory, reviews, and workflow history.",
+      "Teams exploring how research, code, writing, and analysis agents can divide work through a supervisor-led workflow.",
+      "Recruiters and engineering reviewers who want to see practical agentic AI architecture beyond a simple chatbot demo.",
+    ],
+    systemDesign: [
+      "The frontend creates or loads a browser-specific workspace ID and sends it with scoped API requests so each demo user sees their own runs, memory, and pending reviews.",
+      "A FastAPI backend receives agent tasks, retrieves relevant long-term memory from SQLite, and passes structured state into a LangGraph workflow.",
+      "The supervisor agent selects the best specialist agent, chooses whether a deterministic backend tool is needed, and records the route reason.",
+      "Specialist agents cover research, code, writing, and analysis tasks, while backend tools handle calculator, text statistics, and keyword extraction workflows.",
+      "A reviewer agent scores the output. Strong results go to a finalizer, while low-confidence results pause for human approve, revise, or reject actions.",
+      "The dashboard exposes run history, trace timelines, memory management, pending reviews, chat playground, and productivity actions like copy and reuse.",
+    ],
+    architecture: [
+      "React + Vite dashboard",
+      "Workspace ID manager",
+      "FastAPI routers",
+      "SQLite run and memory store",
+      "Memory retriever",
+      "LangGraph supervisor workflow",
+      "Research / Code / Writing / Analysis agents",
+      "Tool registry",
+      "Reviewer and human review service",
+      "Trace timeline and history views",
+    ],
+    workflow: ["Workspace scope", "Task input", "Memory retrieval", "Supervisor routing", "Tool execution", "Specialist agent", "Reviewer score", "Human review / finalizer", "Trace + history save"],
+    concepts: [
+      "Multi-agent orchestration: a central layer coordinates multiple specialist agents instead of relying on one general assistant.",
+      "LangGraph state workflow: each run moves through memory retrieval, supervisor routing, tool execution, specialist output, review, and finalization.",
+      "Tool use: deterministic backend tools support calculator, text statistics, and keyword extraction tasks instead of forcing every operation through an LLM.",
+      "Long-term memory: SQLite stores reusable user preferences, project facts, and writing style information that can be retrieved before a run.",
+      "Human-in-the-loop AI: low-scoring outputs can be approved, revised, or rejected before they are finalized.",
+      "Workspace isolation: browser-specific workspace IDs scope runs, memory, and reviews for safer public demos.",
+      "Observability: trace timelines expose memory, routing, tool, reviewer, and finalizer steps so the workflow is inspectable.",
+    ],
+    logic: [
+      "Create or load a workspace ID in the browser.",
+      "Submit the user task to the FastAPI agent endpoint.",
+      "Retrieve relevant workspace-scoped memories from SQLite.",
+      "Use the supervisor to select the specialist agent and optional backend tool.",
+      "Execute the selected tool when needed, then run the specialist agent.",
+      "Score the result with a reviewer agent and route low-confidence output to human review.",
+      "Save trace, final answer, run status, useful memory, and history for the dashboard.",
+    ],
+    techRationale: [
+      {
+        name: "FastAPI",
+        why: "Used for the backend API, routers, workspace-aware requests, tool execution, memory endpoints, and agent run endpoints.",
+      },
+      {
+        name: "LangGraph",
+        why: "Used to model the multi-agent workflow as explicit state transitions across memory retrieval, routing, tools, review, and finalization.",
+      },
+      {
+        name: "Groq",
+        why: "Used as the LLM inference provider for the agent workflow and direct chat playground.",
+      },
+      {
+        name: "React",
+        why: "Used for the dashboard UI covering Run Agent, Chat Playground, Run History, Human Reviews, Memory, stats, and productivity actions.",
+      },
+      {
+        name: "SQLite",
+        why: "Used for local run history, memory storage, pending reviews, and workspace-scoped persistence in a portfolio-friendly deployment.",
+      },
+      {
+        name: "Tailwind CSS",
+        why: "Used to build a polished, responsive dashboard with tabs, panels, empty states, badges, and interaction feedback.",
+      },
+    ],
+    challenges: [
+      "Keeping multi-agent execution understandable through trace timelines and structured run details.",
+      "Adding workspace isolation for public demo safety without building a full authentication system.",
+      "Combining direct chat with a separate structured agent workflow without confusing the user.",
+      "Designing reviewer scoring and human review so low-confidence outputs have a clear safety path.",
+    ],
+    decisions: [
+      "Separated `/chat` from `/agent/run` so users can choose between direct LLM interaction and the full multi-agent workflow.",
+      "Used workspace IDs in localStorage to scope runs, memories, and reviews for each browser session in the public demo.",
+      "Added deterministic backend tools so the system demonstrates agent tool use, not only text generation.",
+      "Stored traces and run history so the workflow is debuggable and demo-friendly.",
+    ],
+    impact: [
+      "Shows practical understanding of agentic AI system design.",
+      "Demonstrates LangGraph-based multi-agent workflow thinking for real product use cases.",
+      "Adds a strong AI platform project alongside RAG, NLP, and research work.",
+      "Highlights memory, tools, reviewer scoring, human review, workspace isolation, and traceability as engineering concerns.",
+    ],
+    improvements: [
+      "Upgrade SQLite to PostgreSQL or Supabase for stronger persistence on production hosting.",
+      "Replace browser workspace IDs with authenticated user accounts and role-based access control.",
+      "Add richer observability such as token cost, latency, model usage, and replayable run traces.",
+      "Add configurable agent templates so users can create custom teams for different workflows.",
+    ],
+    tech: ["FastAPI", "LangGraph", "Groq", "React", "SQLite"],
+    link: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
+    live: "https://agent-flow-five-phi.vercel.app",
+    image: "/projects/agentflow-dashboard.png",
+    screenshots: [
+      "/projects/agentflow-dashboard.png",
+      "/projects/agentflow-run-agent.png",
+      "/projects/run-agent2.png",
+      "/projects/agentflow-chat-playground.png",
+      "/projects/agentflow-history.png",
+      "/projects/agentflow-reviews.png",
+      "/projects/agentflow-memory.png",
+    ],
+    video: "/videos/agentflow-demo.webm",
+  },
   {
     id: "hirefit",
     title: "HireFit - AI Resume & Job Matcher",
@@ -339,10 +458,10 @@ const projects: Project[] = [
 
 const skillGroups = [
   { title: "AI/ML Core", skills: ["Machine Learning", "Deep Learning", "Feature Engineering", "EDA", "Model Evaluation", "Regression", "Classification", "Clustering", "Experimentation"] },
-  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "Agentic Workflows", "Prompt Engineering", "Context Grounding", "Tool Use"] },
+  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "LangGraph", "Groq", "Multi-Agent Orchestration", "Agentic Workflows", "Prompt Engineering", "Context Grounding", "Tool Use"] },
   { title: "RAG & NLP", skills: ["RAG", "NLP", "Information Retrieval", "Semantic Search", "Document Parsing", "TF-IDF", "Cosine Similarity", "Sentence Transformers"] },
   { title: "Retrieval Stack", skills: ["FAISS", "Vector Search", "BM25", "Cross-Encoder Reranking", "Hybrid Search", "Chunking", "Unstructured Data Processing"] },
-  { title: "Frameworks", skills: ["PyTorch", "Scikit-learn", "LangChain", "FastAPI", "Flask", "Joblib", "Supabase"] },
+  { title: "Frameworks", skills: ["PyTorch", "Scikit-learn", "LangChain", "LangGraph", "FastAPI", "Flask", "Joblib", "SQLite", "Supabase"] },
   { title: "Languages", skills: ["Python", "SQL", "JavaScript", "C", "C++", "C#"] },
   { title: "Product UI", skills: ["React", "Vite", "Tailwind CSS", "TypeScript", "Three.js", "GSAP", "REST APIs"] },
   { title: "Cloud & MLOps", skills: ["Docker", "Azure", "Vercel", "Render", "CI/CD", "Git", "GitHub", "Model Deployment"] },
@@ -356,6 +475,13 @@ const architectures: Architecture[] = [
     desc: "A conceptual architecture for grounded LLM answers over PDFs, URLs, and unstructured documents.",
     nodes: ["Ingestion", "NLP cleaning", "Chunking strategy", "Embedding index", "BM25 recall", "Cross-Encoder rerank", "Grounded generation", "Evaluation"],
     stack: ["FAISS", "BM25", "Cross-Encoder", "LangChain", "FastAPI", "LLM"],
+  },
+  {
+    id: "agentflow",
+    title: "Multi-Agent Platform Design",
+    desc: "AgentFlow architecture for workspace-scoped multi-agent runs with memory retrieval, supervisor routing, backend tools, reviewer scoring, human review, and trace history.",
+    nodes: ["Workspace ID", "Memory retrieval", "Supervisor", "Tool node", "Specialist agent", "Reviewer score", "Human review", "Trace history"],
+    stack: ["FastAPI", "LangGraph", "Groq", "SQLite", "React"],
   },
   {
     id: "resume",
@@ -381,6 +507,14 @@ const architectures: Architecture[] = [
 ];
 
 const motionSystems: MotionSystem[] = [
+  {
+    title: "AgentFlow | Multi-Agent Orchestration",
+    subtitle: "Supervisor-led agent workflow with memory and review",
+    description:
+      "Shows how AgentFlow scopes each browser workspace, retrieves memory, routes a task through LangGraph agents and backend tools, scores the output, and stores a traceable run history.",
+    steps: ["Workspace", "Memory", "Supervisor", "Tool Node", "Specialist Agent", "Reviewer", "Human Review", "History"],
+    stack: ["FastAPI", "LangGraph", "Groq", "SQLite", "React"],
+  },
   {
     title: "HireFit | Applicant NLP Flow",
     subtitle: "Resume-JD matching for job applicants",
@@ -433,6 +567,16 @@ const timeline = [
 const fallbackRepos: Repo[] = [
   {
     id: 1,
+    name: "AgentFlow--Multi-Agent-AI-Platform",
+    html_url: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
+    description: "FastAPI, LangGraph, Groq, React, and SQLite multi-agent orchestration platform.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 2,
     name: "HireFit---AI_Resume_Job_Matcher",
     html_url: "https://github.com/Jatin29AFK/HireFit---AI_Resume_Job_Matcher",
     description: "AI resume and job matching platform.",
@@ -442,7 +586,7 @@ const fallbackRepos: Repo[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: 2,
+    id: 3,
     name: "Nexora",
     html_url: "https://github.com/Jatin29AFK/Nexora",
     description: "RAG study assistant for PDFs, URLs, chat, and quizzes.",
@@ -962,13 +1106,13 @@ function Projects({ onOpenProject }: { onOpenProject: (project: Project) => void
           <SectionTitle title="My Project Case Studies" subtitle="Engineering depth, not just cards" />
         </div>
 
-        <div className="project-track grid gap-6 lg:grid-cols-3">
+        <div className="project-track grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {projects.map((project) => (
             <article key={project.id} className="project-card scroll-reveal glow-card overflow-hidden rounded-2xl">
               <ProjectMedia project={project} />
               <div className="p-6">
                 <p className="mb-2 text-xs uppercase tracking-[0.18em] text-cyan-400">
-                  {project.video ? "Demo Video Project" : "Research Paper Project"}
+                  {getProjectKind(project)}
                 </p>
                 <h3 className="mb-3 text-2xl font-bold">{project.shortTitle}</h3>
                 <p className="text-muted mb-5 text-sm leading-7">{project.desc}</p>
@@ -1025,15 +1169,19 @@ function ProjectMedia({ project }: { project: Project }) {
           alt={project.title}
           className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105"
         />
-      ) : (
+      ) : project.paperPdf ? (
         <div className="research-media-card">
           <span>PDF</span>
           <strong>Research Paper</strong>
           <p>IoT Digital Twin for smart post-harvest storage monitoring</p>
         </div>
+      ) : (
+        <div className="project-static-media">
+          <img src={project.image} alt={project.title} />
+        </div>
       )}
       <div className="preview-badge absolute bottom-4 left-4 rounded-full border border-cyan-400/30 px-3 py-1 text-xs backdrop-blur">
-        {project.video ? "Demo video preview" : "PDF attached"}
+        {getProjectPreviewLabel(project)}
       </div>
     </div>
   );
@@ -1391,7 +1539,7 @@ function PortfolioChat({
             ))}
           </div>
           <div className="flex flex-wrap gap-2 px-4 pb-3">
-            {["What AI projects has Jatin built?", "Does Jatin know RAG?", "Which roles fit Jatin?", "How can I contact Jatin?"].map((question) => (
+            {["What AI projects has Jatin built?", "Tell me about AgentFlow", "Does Jatin know RAG?", "How can I contact Jatin?"].map((question) => (
               <button key={question} onClick={() => submitQuestion(question)} className="quick-question">
                 {question}
               </button>
@@ -1411,7 +1559,7 @@ function PortfolioChat({
           </form>
           <div className="px-4 pb-4">
             <button onClick={() => onOpenProject(projects[0])} className="text-sm font-semibold text-cyan-300 hover:text-cyan-200">
-              Open HireFit case study
+              Open AgentFlow case study
             </button>
           </div>
         </aside>
@@ -1508,7 +1656,7 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-cyan-400/15 bg-inherit p-5 backdrop-blur">
           <div>
             <p className="text-xs uppercase tracking-[0.18em] text-cyan-400">
-              {project.paperPdf ? "Research Project" : "Case Study"}
+              {getProjectKind(project)}
             </p>
             <h2 className="text-2xl font-bold">{project.title}</h2>
           </div>
@@ -1540,7 +1688,7 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
               <h3 className="case-section-heading">Demo Pictures</h3>
               <div className="grid gap-4 md:grid-cols-2">
                 {project.screenshots.map((src) => (
-                  <img key={src} src={src} alt={`${project.shortTitle} demo picture`} className="h-56 w-full rounded-xl object-cover" />
+                  <img key={src} src={src} alt={`${project.shortTitle} demo picture`} className="case-screenshot-image" />
                 ))}
               </div>
             </div>
@@ -1553,7 +1701,7 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
                 <video src={project.video} controls muted playsInline preload="metadata" poster={project.image} />
               </div>
             </div>
-          ) : (
+          ) : project.paperPdf ? (
             <div>
               <h3 className="mb-4 text-xl font-bold">Research Paper</h3>
               <div className="research-paper-card">
@@ -1570,6 +1718,23 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
                       View Attached PDF
                     </a>
                   )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <h3 className="case-section-heading">Platform Snapshot</h3>
+              <div className="platform-snapshot">
+                <img src={project.image} alt={`${project.shortTitle} platform preview`} />
+                <div>
+                  <p>
+                    AgentFlow is presented as a product-style multi-agent platform case study. The focus is on a
+                    FastAPI + LangGraph workflow with Groq agents, SQLite memory, backend tools, reviewer scoring,
+                    human review, workspace isolation, and traceable execution history.
+                  </p>
+                  <a href={project.link} target="_blank" rel="noreferrer" className="primary-button small-button">
+                    GitHub Link
+                  </a>
                 </div>
               </div>
             </div>
@@ -1718,8 +1883,72 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
   );
 }
 
+function getProjectKind(project: Project) {
+  if (project.paperPdf) return "Research Paper Project";
+  if (project.video) return "Demo Video Project";
+  return "AI Platform Project";
+}
+
+function getProjectPreviewLabel(project: Project) {
+  if (project.paperPdf) return "PDF attached";
+  if (project.video) return "Demo video preview";
+  return "Platform preview";
+}
+
+function getQuestionSignals(question: string) {
+  const normalized = question.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const tokens = normalized.split(/\s+/).filter(Boolean);
+  const compact = tokens.join("");
+
+  return { normalized, tokens, compact };
+}
+
+function hasApproxTerm(
+  signals: ReturnType<typeof getQuestionSignals>,
+  terms: string[],
+  maxDistance = 1,
+) {
+  return terms.some((term) => {
+    const normalizedTerm = term.toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+    return (
+      signals.normalized.includes(term.toLowerCase()) ||
+      signals.compact.includes(normalizedTerm) ||
+      signals.tokens.some((token) => editDistance(token, normalizedTerm) <= maxDistance)
+    );
+  });
+}
+
+function editDistance(left: string, right: string) {
+  if (left === right) return 0;
+  if (!left.length) return right.length;
+  if (!right.length) return left.length;
+
+  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  const current = Array(right.length + 1).fill(0);
+
+  for (let i = 1; i <= left.length; i += 1) {
+    current[0] = i;
+    for (let j = 1; j <= right.length; j += 1) {
+      const substitutionCost = left[i - 1] === right[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        current[j - 1] + 1,
+        previous[j] + 1,
+        previous[j - 1] + substitutionCost,
+      );
+    }
+    previous.splice(0, previous.length, ...current);
+  }
+
+  return previous[right.length];
+}
+
 function answerPortfolioQuestion(question: string) {
   const q = question.toLowerCase();
+  const signals = getQuestionSignals(question);
+  const asksAgentFlow = hasApproxTerm(signals, ["agentflow", "agent flow", "agentfow", "multi-agent", "multiagent", "agentic", "orchestration"], 2);
+  const asksHireFit = hasApproxTerm(signals, ["hirefit", "hire fit"], 1) || q.includes("resume") || q.includes("job");
+  const asksNexora = hasApproxTerm(signals, ["nexora"], 1) || q.includes("rag") || q.includes("pdf") || q.includes("bm25") || q.includes("faiss");
 
   if (
     q.includes("contact") ||
@@ -1736,11 +1965,19 @@ function answerPortfolioQuestion(question: string) {
     return `Contact Jatin at ${phone} or ${email}. LinkedIn: ${linkedInUrl}. GitHub: ${githubUrl}.`;
   }
 
-  if (q.includes("hirefit") || q.includes("resume") || q.includes("job")) {
+  if (asksAgentFlow) {
+    return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, Groq, React, SQLite, Vite, and Tailwind. It includes supervisor routing, specialist agents, memory, tools, reviewer scoring, human review, workspace isolation, chat playground, and trace history. Live demo: https://agent-flow-five-phi.vercel.app";
+  }
+
+  if (asksHireFit) {
     return "HireFit is an applicant-focused NLP resume-JD matcher. It uses resume/JD parsing, NLP preprocessing, TF-IDF, cosine similarity, skill-gap analysis, ATS keyword audit, and Gemini-based explanation to help applicants improve role fit before applying.";
   }
 
-  if (q.includes("nexora") || q.includes("rag") || q.includes("pdf") || q.includes("bm25") || q.includes("faiss")) {
+  if (q.includes("project") || q.includes("built") || q.includes("case stud")) {
+    return "Jatin's featured AI projects are AgentFlow for FastAPI + LangGraph multi-agent orchestration, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research for smart post-harvest storage.";
+  }
+
+  if (asksNexora) {
     return "Yes. Jatin has strong RAG experience through Nexora: PDF/URL ingestion, chunking, FAISS + BM25 retrieval, Cross-Encoder reranking, and LLM-based answers and quiz generation.";
   }
 
@@ -1757,10 +1994,10 @@ function answerPortfolioQuestion(question: string) {
   }
 
   if (q.includes("skill") || q.includes("tech")) {
-    return "Jatin's toolkit includes Python, SQL, JavaScript, C, C++, C#, PyTorch, Scikit-learn, ML, DL, NLP, RAG, GenAI, AI agents, LangChain, FAISS, BM25, Cross-Encoder reranking, FastAPI, Flask, React, Docker, Azure, Vercel, Git, and GitHub.";
+    return "Jatin's toolkit includes Python, SQL, JavaScript, C, C++, C#, PyTorch, Scikit-learn, ML, DL, NLP, RAG, GenAI, AI agents, LangGraph, LangChain, Groq, multi-agent orchestration, FAISS, BM25, Cross-Encoder reranking, FastAPI, Flask, React, Docker, Azure, Vercel, Render, Git, and GitHub.";
   }
 
-  return "Portfolio summary: Jatin is a Senior AI/ML Engineer focused on AI agents, RAG, NLP, ML inference systems, and full-stack AI products. Try asking about HireFit, Nexora, skills, experience, roles, or contact.";
+  return "Portfolio summary: Jatin is a Senior AI/ML Engineer focused on AI agents, multi-agent platforms, RAG, NLP, ML inference systems, and full-stack AI products. Try asking about AgentFlow, HireFit, Nexora, skills, experience, roles, or contact.";
 }
 
 function scrollToId(id: string) {
