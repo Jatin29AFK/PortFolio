@@ -6,7 +6,6 @@ import type { Group } from "three";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { supabase } from "./supabase";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -36,10 +35,16 @@ type Project = {
   tech: string[];
   link: string;
   linkLabel?: string;
+  kindLabel?: string;
   paperPdf?: string;
   live?: string;
   image: string;
   screenshots: string[];
+  gallery?: {
+    src: string;
+    title: string;
+    desc: string;
+  }[];
   video?: string;
 };
 
@@ -198,6 +203,7 @@ const projects: Project[] = [
     ],
     tech: ["FastAPI", "LangGraph", "Groq", "React", "SQLite"],
     link: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
+    kindLabel: "AI Multi-Agent Project",
     live: "https://agent-flow-five-phi.vercel.app",
     image: "/projects/agentflow-dashboard.png",
     screenshots: [
@@ -210,6 +216,163 @@ const projects: Project[] = [
       "/projects/agentflow-memory.png",
     ],
     video: "/videos/agentflow-demo.webm",
+  },
+  {
+    id: "code-review-bot",
+    title: "Agentic AI Code Review Bot",
+    shortTitle: "Code Review Bot",
+    desc: "Multi-agent GitHub pull request reviewer with a React dashboard, live diff fetching, structured findings, comment previews, review history, and human-reviewable autofix patch drafts.",
+    problem:
+      "Pull request reviews are repetitive and time-sensitive. Teams still need to catch regressions, security issues, maintainability risks, and missing tests before merging, but doing that well on every PR takes a lot of engineering time.",
+    why:
+      "I built this project to show how agentic AI can support real developer workflows: fetching live GitHub diffs, routing review work across specialist agents, summarizing risk clearly, and keeping final decisions with the human reviewer.",
+    users: [
+      "Developers who want a fast first-pass review before asking teammates for manual review.",
+      "Engineering teams that want more consistent checks for bugs, security issues, code quality problems, and missing tests.",
+      "Maintainers who need structured GitHub comment previews and draft fixes without giving an AI direct merge authority.",
+      "Recruiters and engineering reviewers who want to see practical AI developer tooling beyond chatbot-style demos.",
+    ],
+    systemDesign: [
+      "The dashboard starts with an operations overview showing review counts, average score, issues found, and high-risk PR indicators so teams can understand review activity at a glance.",
+      "A manual review screen accepts a repository URL, PR number, optional GitHub token, and optional path filters so reviews can target public or private pull requests.",
+      "The FastAPI backend fetches live PR metadata and unified diffs from the GitHub REST API, then normalizes the review request into structured backend state.",
+      "A custom review orchestrator runs a staged multi-agent workflow covering diff summary, planning, bug detection, security review, code quality review, test suggestion, final aggregation, and autofix drafting.",
+      "The review result page combines score, risk snapshot, severity mix, reviewed files, workflow notes, and category filters so a human reviewer can inspect the final output efficiently.",
+      "Structured issue cards convert agent output into review findings with severity, category, confidence score, explanation, suggested fix, and risk impact.",
+      "Separate panels expose comment preview, test suggestions, positive notes, and autofix drafts so the reviewer can decide what should be posted or applied next.",
+      "SQLite stores review history so past PR reviews, findings, comment previews, and generated patch drafts can be searched and reopened.",
+      "Optional GitHub comment posting and webhook support let the system move from manual review mode toward automated PR review workflows while staying human-controlled.",
+    ],
+    architecture: [
+      "React + Vite review dashboard",
+      "Review input and PR autofill flow",
+      "FastAPI API layer",
+      "GitHub REST diff fetcher",
+      "Multi-agent review orchestrator",
+      "Bug / Security / Quality / Test specialist agents",
+      "Final review aggregator",
+      "Autofix patch draft generator",
+      "SQLite review history store",
+      "Comment preview and webhook integration",
+    ],
+    workflow: ["Paste PR URL", "Autofill PR details", "Fetch live GitHub diff", "Plan specialist reviews", "Run bug / security / quality / test agents", "Aggregate findings", "Score PR risk", "Draft autofix patches", "Preview or post comments"],
+    concepts: [
+      "Agentic code review: a coordinator uses multiple specialized review agents instead of depending on one generic LLM response.",
+      "Live diff analysis: the system works from real GitHub pull request patches, not manually copied snippets.",
+      "Structured findings: review output is normalized into machine-readable issue objects with severity, confidence, location, and suggested fixes.",
+      "Risk scoring: the system summarizes issue severity and confidence into an overall PR risk signal for faster triage.",
+      "Human-in-the-loop autofix: the bot drafts unified diff patches for eligible issues but never auto-applies them.",
+      "Repository scoping: optional path filters let reviewers focus on selected files or exclude noisy parts of a pull request.",
+      "GitHub workflow integration: reviews can stay in dashboard preview mode or post comments back to GitHub when enabled.",
+    ],
+    logic: [
+      "Parse the GitHub PR URL or repo + PR number into a review request.",
+      "Fetch PR metadata and diff content from the GitHub API.",
+      "Summarize the diff and decide which specialist review agents should run.",
+      "Run bug, security, code quality, and test coverage review passes.",
+      "Merge and deduplicate findings into a final structured review summary.",
+      "Calculate review score, risk level, and issue distribution.",
+      "Generate draft unified diff patches for eligible high-confidence issues.",
+      "Store the review, findings, comment preview, and patch drafts in SQLite history.",
+    ],
+    techRationale: [
+      {
+        name: "FastAPI",
+        why: "Used for review endpoints, GitHub integration, orchestrating agent runs, and serving structured review data to the frontend.",
+      },
+      {
+        name: "React",
+        why: "Used to build the dashboard for PR input, review history, findings inspection, comment preview, and autofix draft viewing.",
+      },
+      {
+        name: "SQLite",
+        why: "Used for lightweight persistence of review history, detailed findings, and generated patch drafts in a portfolio-friendly setup.",
+      },
+      {
+        name: "GitHub REST API",
+        why: "Used to fetch live pull request diffs and optionally post comments back to reviewed PRs.",
+      },
+      {
+        name: "Configurable LLM Providers",
+        why: "Used so the review workflow can run with Groq, OpenAI, OpenRouter, or compatible APIs instead of being locked to one provider.",
+      },
+    ],
+    challenges: [
+      "Keeping review output structured and reliable even when multiple agents contribute findings.",
+      "Balancing deep review coverage with token limits and noisy pull request diffs.",
+      "Designing autofix as a useful assistant without allowing unsafe automatic code changes.",
+      "Supporting both no-token public repo reviews and authenticated private repo workflows.",
+    ],
+    decisions: [
+      "Kept autofix draft-only so humans remain in control of applied code changes.",
+      "Separated specialist agents by review concern so bugs, security, quality, and testing can be reasoned about more clearly.",
+      "Added comment preview before posting to GitHub so teams can inspect AI output first.",
+      "Built separate dashboard, review-form, result, and autofix surfaces so the product feels like a usable engineering tool instead of a single long AI output page.",
+      "Stored review history in SQLite so past PR analyses can be revisited without re-running every review from scratch.",
+    ],
+    impact: [
+      "Demonstrates AI developer-tooling experience, not just end-user chatbot product work.",
+      "Shows practical GitHub integration, multi-agent orchestration, and human-in-the-loop safety design.",
+      "Adds a strong software engineering review automation project alongside RAG, NLP, and agent platform work.",
+      "Highlights structured reasoning, explainable findings, and controlled autofix generation as product design choices.",
+    ],
+    improvements: [
+      "Add inline diff viewers and file-by-file finding navigation in the frontend.",
+      "Add organization-level policy packs for custom code review rules and standards.",
+      "Upgrade SQLite demo storage to a hosted database for collaborative multi-user review history.",
+      "Add background queues for larger PR batches and scheduled webhook-driven review processing.",
+    ],
+    tech: ["FastAPI", "React", "SQLite", "GitHub API", "Multi-Agent AI"],
+    link: "https://github.com/Jatin29AFK/Agentic-AI-Code-Review-Bot",
+    kindLabel: "AI Code Review Project",
+    image: "/projects/Code-Review-Bot dashboard.png",
+    screenshots: [
+      "/projects/Code-Review-Bot dashboard.png",
+      "/projects/New_Review_Section.png",
+      "/projects/Review_Result.png",
+      "/projects/Review_Result2.png",
+      "/projects/Bot_Comment_preview.png",
+      "/projects/Bot_Suggestions.png",
+      "/projects/Bot-Autofix_Drafts.png",
+    ],
+    gallery: [
+      {
+        src: "/projects/Code-Review-Bot dashboard.png",
+        title: "Dashboard Overview",
+        desc: "Landing screen with review KPIs, high-risk PR tracking, repo access guidance, and quick navigation into new reviews or review history.",
+      },
+      {
+        src: "/projects/New_Review_Section.png",
+        title: "Manual PR Review Intake",
+        desc: "Form-driven review setup where the user enters the PR URL, repository URL, PR number, optional GitHub token, and optional path filters before running the agent workflow.",
+      },
+      {
+        src: "/projects/Review_Result.png",
+        title: "Review Summary and Risk Snapshot",
+        desc: "Final review result screen showing the PR title, overall score, risk level, severity mix, reviewed modules, and the actions available for export or GitHub comment posting.",
+      },
+      {
+        src: "/projects/Review_Result2.png",
+        title: "Findings and Workflow Trace",
+        desc: "Detailed result view with category filters, reviewed files, workflow notes, and high-severity findings so the reviewer can audit why the bot raised a specific issue.",
+      },
+      {
+        src: "/projects/Bot_Comment_preview.png",
+        title: "Comment Preview",
+        desc: "Preview panel for the exact summary comment and inline comments that can be posted back to the GitHub pull request after human inspection.",
+      },
+      {
+        src: "/projects/Bot_Suggestions.png",
+        title: "Test Suggestions and Positive Notes",
+        desc: "Reviewer-facing section that separates follow-up test ideas and positive observations so the output is balanced, actionable, and easier to communicate back to the team.",
+      },
+      {
+        src: "/projects/Bot-Autofix_Drafts.png",
+        title: "Autofix Drafts",
+        desc: "Human-reviewable unified diff patch drafts generated only for eligible high-confidence issues, with linked findings and copy/export actions instead of auto-applying changes.",
+      },
+    ],
+    video: "/videos/Code-Review-Bot_Demo.webm",
   },
   {
     id: "hirefit",
@@ -292,6 +455,7 @@ const projects: Project[] = [
     ],
     tech: ["React", "FastAPI", "Gemini", "TF-IDF", "Cosine Similarity"],
     link: "https://github.com/Jatin29AFK/HireFit---AI_Resume_Job_Matcher",
+    kindLabel: "AI NLP Project",
     image: "/projects/overview.png",
     screenshots: ["/projects/overview.png", "/projects/recruiter-view.png", "/projects/deep-dive1.png", "/projects/optimized-resume.png"],
     video: "/videos/hirefit-demo.webm",
@@ -368,6 +532,7 @@ const projects: Project[] = [
     ],
     tech: ["React", "FastAPI", "FAISS", "BM25", "Cross-Encoder"],
     link: "https://github.com/Jatin29AFK/Nexora",
+    kindLabel: "RAG AI Project",
     image: "/projects/HomePage.png",
     screenshots: ["/projects/HomePage.png", "/projects/ChatScreen.png", "/projects/QuizStudio.png", "/projects/QuizResults.png"],
     video: "/videos/nexora-demo.webm",
@@ -470,6 +635,13 @@ const skillGroups = [
 
 const architectures: Architecture[] = [
   {
+    id: "code-review-bot",
+    title: "AI PR Review Orchestrator",
+    desc: "A conceptual architecture for reviewing GitHub pull requests with specialist agents, structured findings, comment previews, and draft autofix generation.",
+    nodes: ["PR intake", "GitHub diff fetch", "Diff summary", "Planning agent", "Bug / Security / Quality / Test agents", "Finding aggregation", "Risk scoring", "Comment preview", "Autofix drafts", "SQLite history"],
+    stack: ["React", "FastAPI", "GitHub API", "SQLite", "Multi-Agent AI"],
+  },
+  {
     id: "rag",
     title: "RAG System Design",
     desc: "A conceptual architecture for grounded LLM answers over PDFs, URLs, and unstructured documents.",
@@ -507,6 +679,14 @@ const architectures: Architecture[] = [
 ];
 
 const motionSystems: MotionSystem[] = [
+  {
+    title: "Code Review Bot | PR Review Workflow",
+    subtitle: "Multi-agent GitHub review with human-controlled output",
+    description:
+      "Shows how the Code Review Bot takes a pull request, fetches the live diff, routes the review across specialist agents, aggregates issues, drafts GitHub comments, and prepares optional autofix patches for human review.",
+    steps: ["PR URL Input", "GitHub Diff Fetch", "Planning Agent", "Bug / Security / Quality / Test Review", "Finding Aggregation", "Risk Score", "Comment Preview", "Autofix Drafts", "Review History"],
+    stack: ["FastAPI", "React", "GitHub API", "SQLite", "Multi-Agent AI"],
+  },
   {
     title: "AgentFlow | Multi-Agent Orchestration",
     subtitle: "Supervisor-led agent workflow with memory and review",
@@ -567,6 +747,16 @@ const timeline = [
 const fallbackRepos: Repo[] = [
   {
     id: 1,
+    name: "Agentic-AI-Code-Review-Bot",
+    html_url: "https://github.com/Jatin29AFK/Agentic-AI-Code-Review-Bot",
+    description: "Multi-agent GitHub PR reviewer with risk scoring, comment previews, and draft autofix patches.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 2,
     name: "AgentFlow--Multi-Agent-AI-Platform",
     html_url: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
     description: "FastAPI, LangGraph, Groq, React, and SQLite multi-agent orchestration platform.",
@@ -576,7 +766,7 @@ const fallbackRepos: Repo[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: 2,
+    id: 3,
     name: "HireFit---AI_Resume_Job_Matcher",
     html_url: "https://github.com/Jatin29AFK/HireFit---AI_Resume_Job_Matcher",
     description: "AI resume and job matching platform.",
@@ -586,7 +776,7 @@ const fallbackRepos: Repo[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: 3,
+    id: 4,
     name: "Nexora",
     html_url: "https://github.com/Jatin29AFK/Nexora",
     description: "RAG study assistant for PDFs, URLs, chat, and quizzes.",
@@ -827,7 +1017,7 @@ function Hero({ onAsk }: { onAsk: () => void }) {
           </h1>
 
           <p className="hero-reveal text-muted mb-8 max-w-xl text-lg leading-8">
-            2 Years 9 Months building AI agents, RAG systems, NLP products, ML inference tools,
+            2 Years 10 months building AI agents, RAG systems, NLP products, ML inference tools,
             and full-stack AI applications with Python, FastAPI, PyTorch, LangChain, React, and Azure.
           </p>
 
@@ -845,7 +1035,7 @@ function Hero({ onAsk }: { onAsk: () => void }) {
 
           <div className="hero-reveal mt-8 flex flex-wrap gap-3">
             <span className="metric-pill">AI Agents | RAG | NLP</span>
-            <span className="metric-pill">2 Years 9 Months Experience</span>
+            <span className="metric-pill">2 Years 10 months Experience</span>
             <span className="metric-pill">Open to AI/ML Roles</span>
           </div>
         </div>
@@ -1230,7 +1420,7 @@ function RecruiterHub() {
     },
     {
       label: "Experience",
-      items: ["Total Experience: 2 Years 9 Months", "Current Role: Senior Engineer - AI/ML", "Previous Role: AI/ML Engineer", "Academic Base: M.Tech CSE, NIT Hamirpur"],
+      items: ["Total Experience: 2 Years 10 months", "Current Role: Senior Engineer - AI/ML", "Previous Role: AI/ML Engineer", "Academic Base: M.Tech CSE, NIT Hamirpur"],
     },
     {
       label: "Timeline",
@@ -1376,42 +1566,80 @@ function Experience() {
 }
 
 function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", message: "", website: "" });
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function openMailFallback(values: typeof form) {
+    const name = values.name.trim();
+    const fromEmail = values.email.trim();
+    const message = values.message.trim();
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(
+      [`Name: ${name}`, `Email: ${fromEmail}`, "", "Message:", message].join("\n"),
+    );
+
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      message: form.message.trim(),
+      website: form.website.trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
       setStatus("Please fill all fields.");
       return;
     }
 
-    if (!supabase) {
-      setStatus("Supabase is not configured. Please check .env.local file.");
+    if (!emailPattern.test(payload.email)) {
+      setStatus("Please enter a valid email address.");
       return;
     }
 
     setSubmitting(true);
     setStatus("");
 
-    const { error } = await supabase.from("contact_messages").insert({
-      name: form.name.trim(),
-      email: form.email.trim(),
-      message: form.message.trim(),
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    setSubmitting(false);
+      if (!response.ok) {
+        let errorMessage = "The contact form is unavailable right now.";
 
-    if (error) {
-      console.error("Contact form error:", error.message);
-      setStatus("Message could not be sent. Please try again.");
-      return;
+        try {
+          const result = (await response.json()) as { error?: string };
+          if (result.error) errorMessage = result.error;
+        } catch {
+          errorMessage = "The contact form is unavailable right now.";
+        }
+
+        openMailFallback(payload);
+        setStatus(`${errorMessage} Your email app has been opened as a fallback.`);
+        setSubmitting(false);
+        return;
+      }
+
+      setForm({ name: "", email: "", message: "", website: "" });
+      setStatus("Message sent successfully. I will get back to you soon.");
+    } catch (error) {
+      console.error("Contact form error:", error);
+      openMailFallback(payload);
+      setStatus("Direct form delivery is unavailable right now. Your email app has been opened as a fallback.");
+    } finally {
+      setSubmitting(false);
     }
-
-    setForm({ name: "", email: "", message: "" });
-    setStatus("Message sent successfully. I will get back to you soon.");
   }
 
   return (
@@ -1449,6 +1677,15 @@ function Contact() {
           <form onSubmit={handleSubmit} className="glow-card rounded-2xl p-8">
             <FormField label="Name" value={form.name} onChange={(value) => setForm((prev) => ({ ...prev, name: value }))} placeholder="Your name" />
             <FormField label="Email" type="email" value={form.email} onChange={(value) => setForm((prev) => ({ ...prev, email: value }))} placeholder="your.email@example.com" />
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+              value={form.website}
+              onChange={(event) => setForm((prev) => ({ ...prev, website: event.target.value }))}
+            />
             <div className="mb-5">
               <label className="mb-2 block text-sm font-medium">Message</label>
               <textarea
@@ -1461,6 +1698,9 @@ function Contact() {
             <button type="submit" disabled={submitting} className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60">
               {submitting ? "Sending..." : "Send Message"}
             </button>
+            <p className="text-muted mt-3 text-xs leading-6">
+              If the built-in form is unavailable, the portfolio will open your email app with the message prefilled.
+            </p>
             {status && <p className="mt-4 text-sm text-cyan-300">{status}</p>}
           </form>
         </div>
@@ -1502,7 +1742,7 @@ function PortfolioChat({
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Portfolio assistant online. Ask me about Jatin's AI agents, RAG systems, NLP projects, ML experience, resume, contact, or role fit.",
+      text: "Portfolio assistant online. Ask me about Jatin's AI agents, code review bot, RAG systems, NLP projects, ML experience, resume, contact, or role fit.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -1539,7 +1779,7 @@ function PortfolioChat({
             ))}
           </div>
           <div className="flex flex-wrap gap-2 px-4 pb-3">
-            {["What AI projects has Jatin built?", "Tell me about AgentFlow", "Does Jatin know RAG?", "How can I contact Jatin?"].map((question) => (
+            {["What AI projects has Jatin built?", "Tell me about AgentFlow", "Tell me about the Code Review Bot", "Does Jatin know RAG?", "How can I contact Jatin?"].map((question) => (
               <button key={question} onClick={() => submitQuestion(question)} className="quick-question">
                 {question}
               </button>
@@ -1649,6 +1889,7 @@ function CommandPalette({
 
 function CaseStudyModal({ project, onClose }: { project: Project; onClose: () => void }) {
   useEscape(onClose);
+  const galleryItems = project.gallery ?? project.screenshots.map((src) => ({ src, title: `${project.shortTitle} preview`, desc: "" }));
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -1685,10 +1926,16 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
 
           {project.screenshots.length > 0 && (
             <div>
-              <h3 className="case-section-heading">Demo Pictures</h3>
+              <h3 className="case-section-heading">Product Screens</h3>
               <div className="grid gap-4 md:grid-cols-2">
-                {project.screenshots.map((src) => (
-                  <img key={src} src={src} alt={`${project.shortTitle} demo picture`} className="case-screenshot-image" />
+                {galleryItems.map((item) => (
+                  <figure key={item.src} className="glow-card overflow-hidden rounded-2xl p-3">
+                    <img src={item.src} alt={item.title} className="case-screenshot-image" />
+                    <figcaption className="px-1 pt-4">
+                      <p className="font-semibold">{item.title}</p>
+                      {item.desc && <p className="text-muted mt-2 text-sm leading-7">{item.desc}</p>}
+                    </figcaption>
+                  </figure>
                 ))}
               </div>
             </div>
@@ -1884,6 +2131,7 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
 }
 
 function getProjectKind(project: Project) {
+  if (project.kindLabel) return project.kindLabel;
   if (project.paperPdf) return "Research Paper Project";
   if (project.video) return "Demo Video Project";
   return "AI Platform Project";
@@ -1891,6 +2139,7 @@ function getProjectKind(project: Project) {
 
 function getProjectPreviewLabel(project: Project) {
   if (project.paperPdf) return "PDF attached";
+  if (project.id === "code-review-bot") return "Workflow demo preview";
   if (project.video) return "Demo video preview";
   return "Platform preview";
 }
@@ -1946,6 +2195,9 @@ function editDistance(left: string, right: string) {
 function answerPortfolioQuestion(question: string) {
   const q = question.toLowerCase();
   const signals = getQuestionSignals(question);
+  const asksCodeReviewBot =
+    hasApproxTerm(signals, ["code review bot", "code reviewer", "review bot", "pull request review", "pr review", "agentic ai code review bot"], 2) ||
+    ((q.includes("code review") || q.includes("pull request")) && (q.includes("bot") || q.includes("github") || q.includes("review")));
   const asksAgentFlow = hasApproxTerm(signals, ["agentflow", "agent flow", "agentfow", "multi-agent", "multiagent", "agentic", "orchestration"], 2);
   const asksHireFit = hasApproxTerm(signals, ["hirefit", "hire fit"], 1) || q.includes("resume") || q.includes("job");
   const asksNexora = hasApproxTerm(signals, ["nexora"], 1) || q.includes("rag") || q.includes("pdf") || q.includes("bm25") || q.includes("faiss");
@@ -1965,6 +2217,10 @@ function answerPortfolioQuestion(question: string) {
     return `Contact Jatin at ${phone} or ${email}. LinkedIn: ${linkedInUrl}. GitHub: ${githubUrl}.`;
   }
 
+  if (asksCodeReviewBot) {
+    return "Agentic AI Code Review Bot is Jatin's multi-agent GitHub pull request reviewer. It fetches live PR diffs, runs specialist review agents for bugs, security, code quality, and missing tests, then produces structured findings, PR risk scoring, comment previews, review history, and human-reviewable autofix patch drafts.";
+  }
+
   if (asksAgentFlow) {
     return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, Groq, React, SQLite, Vite, and Tailwind. It includes supervisor routing, specialist agents, memory, tools, reviewer scoring, human review, workspace isolation, chat playground, and trace history. Live demo: https://agent-flow-five-phi.vercel.app";
   }
@@ -1974,7 +2230,7 @@ function answerPortfolioQuestion(question: string) {
   }
 
   if (q.includes("project") || q.includes("built") || q.includes("case stud")) {
-    return "Jatin's featured AI projects are AgentFlow for FastAPI + LangGraph multi-agent orchestration, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research for smart post-harvest storage.";
+    return "Jatin's featured AI projects are AgentFlow for multi-agent orchestration, Agentic AI Code Review Bot for GitHub PR review automation, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research for smart post-harvest storage.";
   }
 
   if (asksNexora) {

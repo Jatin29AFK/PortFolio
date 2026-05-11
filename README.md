@@ -62,7 +62,8 @@ Research-oriented project focused on IoT telemetry, Azure IoT concepts, and digi
 
 ### Backend / Data / Services
 
-- Supabase
+- Vercel Serverless Functions
+- Resend
 - Vercel Analytics
 - Vercel Speed Insights
 
@@ -133,16 +134,24 @@ npm install
 Create a `.env.local` file:
 
 ```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+RESEND_API_KEY=your_resend_api_key
+CONTACT_FROM_EMAIL="Portfolio Contact <onboarding@resend.dev>"
+CONTACT_TO_EMAIL=shukla.jeetu2550@gmail.com
 ```
 
-The portfolio still runs without Supabase, but the contact form will stay inactive until these are configured.
+For production, replace `onboarding@resend.dev` with an address from a verified Resend domain.
+The contact form can still fall back to the visitor's email app if direct delivery is unavailable.
 
 ### 4. Start the development server
 
 ```bash
 npm run dev
+```
+
+For direct contact-form email sending during local development, run the app through Vercel's local runtime so `/api/contact` is available:
+
+```bash
+vercel dev
 ```
 
 ### 5. Build for production
@@ -165,7 +174,10 @@ Recommended flow:
 
 1. Push changes to GitHub
 2. Connect the repository to Vercel
-3. Add the required environment variables in Vercel
+3. Add the required environment variables in Vercel:
+   - `RESEND_API_KEY`
+   - `CONTACT_FROM_EMAIL`
+   - `CONTACT_TO_EMAIL`
 4. Redeploy
 
 ## Assets Included
