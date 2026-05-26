@@ -101,7 +101,7 @@ const projects: Project[] = [
     id: "agentflow",
     title: "AgentFlow - Multi-Agent AI Platform",
     shortTitle: "AgentFlow",
-    desc: "Full-stack multi-agent AI orchestration platform with a FastAPI + LangGraph backend, React dashboard, SQLite persistence, semantic memory, SSE workflow streaming, human review, and pluggable Groq, OpenAI, or Ollama providers.",
+    desc: "Full-stack multi-agent AI orchestration platform with a FastAPI + LangGraph backend, React dashboard, SQLite persistence, semantic memory, SSE workflow streaming, direct chat, human review, and configurable Groq, OpenAI, or Ollama providers.",
     problem:
       "Most AI demos stop at one LLM response, but production-style agent systems need routing, tool loops, memory retrieval, observability, human review, safer deployment defaults, and a clean interface for inspecting what happened during a run.",
     why:
@@ -134,6 +134,8 @@ const projects: Project[] = [
       "Guarded multi-tool registry",
       "SSE workflow stream layer",
       "Reviewer and human review service",
+      "Role-specific model and temperature configuration",
+      "Review webhooks and API reliability controls",
       "Run history, filters, and export APIs",
     ],
     workflow: ["Workspace scope", "Task input", "Semantic memory retrieval", "Supervisor routing", "Guarded tool loop", "Specialist agent", "Reviewer score", "Human review / finalizer", "Trace + history save", "Memory extraction"],
@@ -154,7 +156,7 @@ const projects: Project[] = [
       "Retrieve relevant workspace-scoped memories from SQLite with semantic search when embeddings are available.",
       "Use the supervisor to select the specialist agent and optional backend tool loop.",
       "Execute the selected tool when needed, then run the specialist agent and stream progress back to the UI.",
-      "Score the result with a reviewer agent and route low-confidence output to human review.",
+      "Score the result with a reviewer agent, route low-confidence output to human review, and optionally notify reviewers through a webhook.",
       "Save trace, final answer, run status, useful memory, and history for dashboard search, filters, and export.",
     ],
     techRationale: [
@@ -182,6 +184,14 @@ const projects: Project[] = [
         name: "Tailwind CSS",
         why: "Used to build a polished, responsive dashboard with focused tabs, panels, trace views, filters, empty states, badges, and interaction feedback.",
       },
+      {
+        name: "Production Controls",
+        why: "Uses request IDs, structured JSON logging, retry handling, rate limits, CORS controls, SQLite WAL mode, and optional review webhooks to make the public demo easier to operate safely.",
+      },
+      {
+        name: "Render + Vercel",
+        why: "Separates the deployable FastAPI backend from the Vite frontend so the full-stack application can be hosted and demonstrated end to end.",
+      },
     ],
     challenges: [
       "Keeping multi-agent execution understandable in real time through SSE updates, trace timelines, and structured run details.",
@@ -195,6 +205,8 @@ const projects: Project[] = [
       "Added SSE-based workflow streaming so the dashboard can show node-by-node progress instead of only a final answer.",
       "Kept embeddings optional with lexical fallback so the memory system remains portable across lighter deployments.",
       "Added deterministic and research-oriented backend tools so the system demonstrates agent tool use, not only text generation.",
+      "Made model and temperature selection configurable by role so chat, routing, specialist generation, review, and memory extraction can be tuned independently.",
+      "Added retries, rate limits, structured logging, request IDs, and optional pending-review webhooks as operational safeguards for a deployed demo.",
       "Stored traces and run history with filtering and export so the workflow is debuggable and demo-friendly.",
     ],
     impact: [
@@ -210,7 +222,7 @@ const projects: Project[] = [
       "Add richer observability such as token cost, latency, model usage, and replayable run traces.",
       "Add configurable agent templates and more external tools so users can create custom teams for different workflows.",
     ],
-    tech: ["FastAPI", "LangGraph", "React", "SQLite", "Groq/OpenAI/Ollama"],
+    tech: ["FastAPI", "LangGraph", "LangChain", "Pydantic", "React", "Tailwind", "SQLite", "Groq / OpenAI / Ollama", "Render", "Vercel"],
     link: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
     kindLabel: "AI Multi-Agent Project",
     live: "https://agent-flow-five-phi.vercel.app",
@@ -697,9 +709,9 @@ const architectures: Architecture[] = [
   {
     id: "agentflow",
     title: "Multi-Agent Platform Design",
-    desc: "AgentFlow architecture for workspace-scoped multi-agent runs with semantic memory, provider abstraction, SSE streaming, guarded tool loops, human review, and searchable history.",
-    nodes: ["Workspace ID", "Semantic memory", "Supervisor", "Guarded tool loop", "Specialist agent", "Reviewer score", "SSE stream", "Human review", "History + export"],
-    stack: ["FastAPI", "LangGraph", "Groq/OpenAI/Ollama", "SQLite", "React"],
+    desc: "AgentFlow architecture for workspace-scoped multi-agent runs with semantic memory, role-configurable LLM providers, SSE streaming, guarded tool loops, human review notifications, and searchable history.",
+    nodes: ["Workspace ID", "Semantic memory", "Supervisor", "Guarded tool loop", "Specialist agent", "Reviewer score", "SSE stream", "Human review", "Optional webhook", "History + export"],
+    stack: ["FastAPI", "LangGraph", "LangChain", "Groq/OpenAI/Ollama", "SQLite", "React"],
   },
   {
     id: "resume",
@@ -737,9 +749,9 @@ const motionSystems: MotionSystem[] = [
     title: "AgentFlow | Multi-Agent Orchestration",
     subtitle: "Supervisor-led agent workflow with streaming, memory, and review",
     description:
-      "Shows how AgentFlow scopes each browser workspace, retrieves semantic memory, routes a task through LangGraph agents and backend tools, streams workflow progress, scores the output, and stores searchable run history with export support.",
-    steps: ["Workspace", "Semantic Memory", "Supervisor", "Guarded Tool Loop", "Specialist Agent", "Reviewer", "Stream Events", "Human Review", "History + Export"],
-    stack: ["FastAPI", "LangGraph", "Groq/OpenAI/Ollama", "SQLite", "React"],
+      "Shows how AgentFlow scopes each browser workspace, retrieves semantic memory, routes a task through role-configurable LangGraph agents and backend tools, streams progress, routes low scores for review notification, and stores exportable run history.",
+    steps: ["Workspace", "Semantic Memory", "Supervisor", "Guarded Tool Loop", "Specialist Agent", "Reviewer", "Stream Events", "Human Review", "Optional Webhook", "History + Export"],
+    stack: ["FastAPI", "LangGraph", "LangChain", "Groq/OpenAI/Ollama", "SQLite", "React"],
   },
   {
     title: "HireFit | Applicant NLP Flow",
@@ -805,7 +817,7 @@ const fallbackRepos: Repo[] = [
     id: 2,
     name: "AgentFlow--Multi-Agent-AI-Platform",
     html_url: "https://github.com/Jatin29AFK/AgentFlow--Multi-Agent-AI-Platform",
-    description: "FastAPI, LangGraph, React, and SQLite multi-agent orchestration platform with semantic memory, SSE streaming, and pluggable LLM providers.",
+    description: "LangGraph multi-agent platform with semantic memory, SSE streaming, human review, research tools, and role-configurable Groq/OpenAI/Ollama providers.",
     stargazers_count: 0,
     forks_count: 0,
     language: "Python",
@@ -2268,7 +2280,7 @@ function answerPortfolioQuestion(question: string) {
   }
 
   if (asksAgentFlow) {
-    return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, React, SQLite, Vite, and Tailwind. It now includes semantic memory with optional embeddings, SSE workflow streaming, Groq/OpenAI/Ollama provider support, research tools like Wikipedia and arXiv search, reviewer scoring, human review, workspace isolation, chat playground, and searchable/exportable run history. Live demo: https://agent-flow-five-phi.vercel.app";
+    return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, LangChain, React, SQLite, Vite, and Tailwind. It includes semantic memory with optional embeddings and lexical fallback, SSE workflow streaming, role-configurable Groq/OpenAI/Ollama providers, Wikipedia and arXiv research tools, reviewer scoring, optional human-review webhooks, workspace isolation, direct chat, and searchable/exportable run history. The deployed API also uses retries, rate limits, request IDs, structured logs, and SQLite WAL mode. Live demo: https://agent-flow-five-phi.vercel.app";
   }
 
   if (asksHireFit) {
