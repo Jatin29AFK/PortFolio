@@ -10,6 +10,17 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type Theme = "dark" | "light";
+type ContactMode = "message" | "interview";
+type ContactFormPayload = {
+  type: ContactMode;
+  name: string;
+  email: string;
+  company: string;
+  role: string;
+  preferredTime: string;
+  message: string;
+  website: string;
+};
 
 type Project = {
   id: string;
@@ -84,6 +95,7 @@ type MotionSystem = {
 const resumePath = "/Resume/JatinShukla_resume.pdf";
 const profilePhotoPath = "/Resume/1774121399635.png";
 const email = "shukla.jeetu2550@gmail.com";
+const formSubmitEndpoint = `https://formsubmit.co/ajax/${email}`;
 const phone = "+91-9116237146";
 const githubUrl = "https://github.com/Jatin29AFK";
 const linkedInUrl = "https://www.linkedin.com/in/jatin-shukla-401739202/";
@@ -433,6 +445,92 @@ const projects: Project[] = [
     video: "/videos/Code-Review-Bot_Demo.webm",
   },
   {
+    id: "refundpilot",
+    title: "RefundCopilot AI Agent - Policy-Grounded Refund Automation",
+    shortTitle: "RefundCopilot AI Agent",
+    desc: "Containerized internal support workspace that evaluates e-commerce refund requests, applies deterministic refund policy, detects prompt-injection attempts, and records structured admin decision logs.",
+    problem:
+      "Customer-support AI can be pressured into ignoring policy, approving invalid refunds, or hiding its reasoning. A useful refund assistant needs trusted tools, deterministic policy checks, safety detection, and auditable logs.",
+    why:
+      "I built RefundCopilot AI as a reviewable AI Engineer take-home project that works without paid LLM access by default, while still showing agent orchestration, tool use, policy enforcement, and optional Groq response polishing.",
+    users: [
+      "Support teams that need refund decisions grounded in order data and policy.",
+      "Admins reviewing why an AI assistant approved, denied, or escalated a refund.",
+      "Hiring teams evaluating practical agent safety, backend design, and Dockerized full-stack execution.",
+    ],
+    systemDesign: [
+      "A React frontend provides customer chat, seeded demo scenarios, and an admin dashboard.",
+      "A FastAPI backend loads seeded SQLite customer, order, policy, and decision-log data.",
+      "The refund agent extracts order IDs, verifies ownership, reads refund policy, and runs deterministic eligibility checks.",
+      "Prompt-injection detection flags override attempts but does not let user text control trusted policy tools.",
+      "Admin logs capture tool calls, policy checks, reason codes, trace IDs, and customer-safe responses.",
+    ],
+    architecture: ["React + Vite UI", "FastAPI backend", "SQLite CRM/order store", "Refund agent orchestrator", "Prompt-injection detector", "Policy engine", "Admin trace logs", "Docker Compose"],
+    workflow: ["Customer message", "Injection detection", "Order extraction", "Customer/order lookup", "Policy check", "Approve / deny / escalate", "Customer-safe response", "Admin trace save"],
+    concepts: [
+      "Policy-grounded AI: deterministic business rules make the decision before any optional LLM response polishing.",
+      "Prompt-injection defense: untrusted customer text is detected and logged without overriding trusted tools.",
+      "Auditability: every decision stores reason codes, policy checks, tool calls, and trace IDs.",
+      "No-key core demo: the product remains reviewable without paid model credentials.",
+    ],
+    logic: [
+      "Receive `customer_id` and refund message.",
+      "Detect prompt-injection or policy-override language.",
+      "Load customer and order details from SQLite.",
+      "Apply refund policy rules such as 30-day window, final sale, already refunded, high amount, and risk score.",
+      "Execute one internal action and save a structured decision log.",
+    ],
+    techRationale: [
+      { name: "FastAPI", why: "Used for chat, customer, order, health, and admin-log endpoints." },
+      { name: "React + TypeScript", why: "Used for the customer workspace and admin trace dashboard." },
+      { name: "SQLite", why: "Used for seeded CRM/order/demo state and structured logs." },
+      { name: "Docker Compose", why: "Used so reviewers can run frontend and backend together with one command." },
+      { name: "Groq optional", why: "Used only for response polishing after deterministic policy evaluation." },
+    ],
+    challenges: ["Balancing AI chat with deterministic policy", "Making prompt injection visible but not decision-controlling", "Designing reviewable admin traces", "Keeping the demo runnable without API keys"],
+    decisions: [
+      "Made deterministic policy mode the default so core behavior is stable.",
+      "Logged injection attempts alongside normal policy reason codes.",
+      "Separated customer-safe responses from admin-only traces.",
+      "Used Docker to make the project easy to evaluate.",
+    ],
+    impact: ["Shows agent safety and tool-use thinking", "Demonstrates full-stack AI product execution", "Adds a customer-support AI agent use case to the portfolio"],
+    improvements: ["Add role-based admin authentication", "Persist financial actions to a ledger table", "Add Playwright tests for Docker demo flows"],
+    tech: ["FastAPI", "React", "TypeScript", "SQLite", "Docker", "Agentic AI"],
+    link: "https://github.com/Jatin29AFK/refundpilot-ai-agent",
+    kindLabel: "AI Support Agent Project",
+    image: "/projects/refundcopilot-dashboard.png",
+    screenshots: [
+      "/projects/refundcopilot-dashboard.png",
+      "/projects/refundcopilot-chat-flow.png",
+      "/projects/refundcopilot-admin-trace.png",
+      "/projects/refundcopilot-policy-check.png",
+    ],
+    gallery: [
+      {
+        src: "/projects/refundcopilot-dashboard.png",
+        title: "RefundCopilot Dashboard",
+        desc: "Main support workspace showing the refund assistant experience, customer context, and policy-grounded decision surface.",
+      },
+      {
+        src: "/projects/refundcopilot-chat-flow.png",
+        title: "Customer Refund Flow",
+        desc: "Conversation flow where the agent receives the refund request, extracts order context, and responds with a customer-safe decision.",
+      },
+      {
+        src: "/projects/refundcopilot-admin-trace.png",
+        title: "Admin Trace Review",
+        desc: "Reviewer-facing trace with tool calls, reason codes, policy checks, and decision metadata for auditability.",
+      },
+      {
+        src: "/projects/refundcopilot-policy-check.png",
+        title: "Policy Check Evidence",
+        desc: "Policy evaluation view showing how deterministic refund rules support approve, deny, or escalate outcomes.",
+      },
+    ],
+    video: "/videos/refundcopilot-demo.webm",
+  },
+  {
     id: "hirefit",
     title: "HireFit - AI Resume & Job Matcher",
     shortTitle: "HireFit",
@@ -519,6 +617,159 @@ const projects: Project[] = [
     video: "/videos/hirefit-demo.webm",
   },
   {
+    id: "market-insight-ai",
+    title: "Market Insight AI Agent - Agentic Stock Research Assistant",
+    shortTitle: "Market Insight AI Agent",
+    desc: "Full-stack stock market research assistant with a FastAPI + LangGraph backend, Next.js dashboard, yFinance-powered market data, historical price charts, streaming AI analysis, and transparent tool traces.",
+    problem:
+      "Stock research tools are often split between raw finance dashboards and generic AI chat. Users need a workflow that combines real market data, company fundamentals, historical context, and grounded natural-language explanation in one place.",
+    why:
+      "I built Market Insight AI Agent to show how agentic AI can support financial research responsibly: deterministic data first, AI explanation second, visible tool usage, and an educational framing instead of ungrounded buy-sell hype.",
+    users: [
+      "Learners and retail users who want clearer, easier-to-read stock insights from live market and company data.",
+      "Product teams exploring finance-focused AI assistants that combine structured APIs with agent reasoning and streaming responses.",
+      "Developers who want to see how LangGraph tool-calling can be applied to a grounded financial analysis workflow.",
+      "Recruiters and engineering reviewers who want a full-stack AI product that mixes agents, data tools, charts, and UX polish.",
+    ],
+    systemDesign: [
+      "The user enters a stock symbol or market-research question through a Next.js dashboard designed like a lightweight financial analysis workspace.",
+      "The frontend sends the request to a FastAPI backend, which validates the query and prepares it for an agent-driven research flow.",
+      "A LangGraph-based tool-calling agent decides which market-data tools to invoke so the final response is grounded in fetched financial context instead of only model memory.",
+      "yFinance-backed tools retrieve stock snapshot data such as price, market cap, PE ratio, EPS, revenue growth, profit margin, and 52-week range.",
+      "Historical price data is returned to the frontend and visualized with Recharts so users can inspect trend behavior alongside the written explanation.",
+      "Groq provides the natural-language explanation layer after tool results are collected, helping the product turn raw market signals into readable analysis.",
+      "The backend streams the AI response progressively, while the frontend consumes readable streams so the product feels interactive instead of waiting on one large final payload.",
+      "A visible tool-usage trace explains which tools were called during the run, improving transparency and making the assistant feel more trustworthy.",
+      "An educational disclaimer frames the output as research support rather than financial advice, which is an important product safety choice for this domain.",
+    ],
+    architecture: [
+      "Next.js research dashboard",
+      "Stock query input flow",
+      "FastAPI API layer",
+      "LangGraph tool-calling agent",
+      "Financial data toolset",
+      "yFinance market-data integration",
+      "Groq explanation layer",
+      "Streaming response pipeline",
+      "Recharts historical price visualizer",
+      "Tool trace and responsible-use UI",
+    ],
+    workflow: ["User enters stock query", "FastAPI request validation", "LangGraph tool planning", "Fetch market snapshot", "Fetch historical price data", "Build chart-ready response", "Generate Groq explanation", "Stream insight to frontend", "Show tool trace and disclaimer"],
+    concepts: [
+      "Grounded financial AI: the assistant explains stocks from fetched market data and company metrics instead of relying only on the LLM's prior knowledge.",
+      "Agentic tool use: a LangGraph workflow decides which stock-data tools to call before generating the final response.",
+      "Structured fundamentals: snapshot metrics like PE ratio, EPS, revenue growth, profit margin, market cap, and 52-week range provide interpretable financial context.",
+      "Historical trend visualization: price history is exposed as chart data so users can combine narrative explanation with a visual market view.",
+      "Streaming UX: partial response delivery keeps long-running AI analysis feeling responsive in the product interface.",
+      "Transparent reasoning support: visible tool traces help the user understand how the assistant formed its answer.",
+      "Responsible AI in finance: the product positions itself as an educational research assistant, not an automated trading or investment-decision engine.",
+    ],
+    logic: [
+      "Accept a stock symbol or stock-related prompt from the frontend.",
+      "Validate and normalize the request in the FastAPI backend.",
+      "Use a LangGraph agent to decide which market-data tools to call.",
+      "Fetch stock snapshot metrics and historical pricing through yFinance-backed services.",
+      "Return chart-ready structured data for the frontend dashboard.",
+      "Use Groq to turn the collected evidence into a readable market insight summary.",
+      "Stream the explanation to the frontend and display the tool trace beside the result.",
+    ],
+    techRationale: [
+      {
+        name: "FastAPI",
+        why: "Used for the backend API, request validation, modular stock-analysis endpoints, and streaming AI responses to the frontend.",
+      },
+      {
+        name: "LangGraph",
+        why: "Used to coordinate tool-calling behavior so the assistant can fetch data before generating its financial explanation.",
+      },
+      {
+        name: "yFinance",
+        why: "Used to retrieve live-friendly market data, company fundamentals, and historical prices that ground the assistant's output.",
+      },
+      {
+        name: "Groq",
+        why: "Used for fast natural-language explanation once the financial tools have returned the relevant evidence.",
+      },
+      {
+        name: "Next.js",
+        why: "Used to build the product-style frontend with stock research input, dashboard presentation, streamed response rendering, and responsive layout.",
+      },
+      {
+        name: "Recharts",
+        why: "Used to visualize historical stock-price movement so the market narrative is paired with a readable chart.",
+      },
+    ],
+    challenges: [
+      "Keeping the AI explanation grounded in financial data instead of drifting into generic market commentary.",
+      "Designing a finance dashboard that balances metrics, charts, streamed analysis, and trace visibility without overwhelming the user.",
+      "Making tool usage transparent enough that a user can trust what the assistant actually looked at.",
+      "Framing the product responsibly so it supports research and learning rather than unsafe automated financial advice.",
+    ],
+    decisions: [
+      "Separated data retrieval from explanation so structured market facts are collected before the LLM writes the final answer.",
+      "Used LangGraph tool-calling instead of a plain chat endpoint so the workflow clearly demonstrates agentic retrieval behavior.",
+      "Added historical charting and metric cards to make the experience feel like a real financial research product, not only a text box.",
+      "Streamed the response and exposed tool traces so the user can follow both speed and transparency during analysis.",
+      "Included an educational disclaimer because finance-facing AI should communicate domain limits clearly.",
+    ],
+    impact: [
+      "Adds a finance-oriented AI product to the portfolio alongside multi-agent, RAG, NLP, and research work.",
+      "Demonstrates grounded tool-using AI design in a high-signal domain where explanation quality and trust both matter.",
+      "Shows full-stack product execution across FastAPI, LangGraph, Next.js, charts, streaming UX, and responsible AI framing.",
+      "Strengthens the portfolio's breadth by showing applied AI beyond developer tooling and document workflows.",
+    ],
+    improvements: [
+      "Add comparative multi-stock analysis so users can evaluate several symbols in one run.",
+      "Add source-level citations and timestamped data stamps for even clearer market-data provenance.",
+      "Add watchlists and saved research sessions so users can revisit previous analyses.",
+      "Add richer financial tooling such as news sentiment, earnings event summaries, or sector-relative comparisons.",
+    ],
+    tech: ["FastAPI", "LangGraph", "LangChain", "Groq", "yFinance", "Next.js", "TypeScript", "Tailwind CSS", "Recharts"],
+    link: "https://github.com/Jatin29AFK/Market-Insight-AI-Agent",
+    kindLabel: "AI Finance Project",
+    image: "/projects/market-insight-hero.png",
+    screenshots: [
+      "/projects/market-insight-hero.png",
+      "/projects/market-insight-ask-agent.png",
+      "/projects/market-insight-aapl-analysis.png",
+      "/projects/market-insight-msft-snapshot.png",
+      "/projects/market-insight-msft-response.png",
+      "/projects/market-insight-watchlist-compare.png",
+    ],
+    gallery: [
+      {
+        src: "/projects/market-insight-hero.png",
+        title: "Landing + Research Entry",
+        desc: "Hero section introducing the product, its educational market-research positioning, and the first ask-agent workspace where users enter a stock symbol and question.",
+      },
+      {
+        src: "/projects/market-insight-ask-agent.png",
+        title: "Ask Agent Workspace",
+        desc: "Primary research panel with ticker input, natural-language prompt box, quick stock shortcuts, chart-period controls, reusable prompts, and the action to generate a streamed insight.",
+      },
+      {
+        src: "/projects/market-insight-aapl-analysis.png",
+        title: "Price Chart + Agent Progress",
+        desc: "An active analysis run showing the historical price chart, intermediate LangGraph progress states, and the streamed market summary generated for the selected stock.",
+      },
+      {
+        src: "/projects/market-insight-msft-snapshot.png",
+        title: "Company Snapshot Dashboard",
+        desc: "Fundamentals-focused view summarizing the company profile, current price, market cap, PE, EPS, revenue growth, profit margin, beta, and 52-week range in one screen.",
+      },
+      {
+        src: "/projects/market-insight-msft-response.png",
+        title: "Detailed Financial Insight Response",
+        desc: "Structured answer screen breaking the result into direct answer, data used, key signals, risks or limitations, educational note, tools used, and execution metadata for transparency.",
+      },
+      {
+        src: "/projects/market-insight-watchlist-compare.png",
+        title: "Watchlist Compare",
+        desc: "Multi-stock comparison workspace that lets users load up to five symbols side by side and compare headline valuation and business-health metrics quickly.",
+      },
+    ],
+  },
+  {
     id: "nexora",
     title: "Nexora - AI Study Assistant",
     shortTitle: "Nexora",
@@ -589,7 +840,7 @@ const projects: Project[] = [
       "Add streaming responses and background indexing for a smoother user experience.",
     ],
     tech: ["React", "FastAPI", "FAISS", "BM25", "Cross-Encoder"],
-    link: "https://github.com/Jatin29AFK/Nexora",
+    link: "https://github.com/Jatin29AFK/Nexora--AI_Study_Assistant",
     kindLabel: "RAG AI Project",
     image: "/projects/HomePage.png",
     screenshots: ["/projects/HomePage.png", "/projects/ChatScreen.png", "/projects/QuizStudio.png", "/projects/QuizResults.png"],
@@ -680,14 +931,15 @@ const projects: Project[] = [
 ];
 
 const skillGroups = [
-  { title: "AI/ML Core", skills: ["Machine Learning", "Deep Learning", "Feature Engineering", "EDA", "Model Evaluation", "Regression", "Classification", "Clustering", "Experimentation"] },
-  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "LangGraph", "Groq", "Multi-Agent Orchestration", "Agentic Workflows", "Prompt Engineering", "Context Grounding", "Tool Use"] },
-  { title: "RAG & NLP", skills: ["RAG", "NLP", "Information Retrieval", "Semantic Search", "Document Parsing", "TF-IDF", "Cosine Similarity", "Sentence Transformers"] },
+  { title: "AI/ML Core", skills: ["Machine Learning", "Deep Learning", "Feature Engineering", "EDA", "Model Evaluation", "Regression", "Classification", "Clustering", "Experimentation", "Model Lifecycle Management"] },
+  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "LangGraph", "LangChain", "LlamaIndex", "Groq", "Multi-Agent Orchestration", "Agentic Workflows", "Prompt Engineering", "Context Grounding", "Tool Calling", "Human-in-the-Loop AI"] },
+  { title: "RAG & NLP", skills: ["RAG", "NLP", "Information Retrieval", "Semantic Search", "Document Parsing", "TF-IDF", "Cosine Similarity", "Sentence Transformers", "Hugging Face"] },
   { title: "Retrieval Stack", skills: ["FAISS", "Vector Search", "BM25", "Cross-Encoder Reranking", "Hybrid Search", "Chunking", "Unstructured Data Processing"] },
-  { title: "Frameworks", skills: ["PyTorch", "Scikit-learn", "LangChain", "LangGraph", "FastAPI", "Flask", "Joblib", "SQLite", "Supabase"] },
+  { title: "Frameworks", skills: ["PyTorch", "TensorFlow", "Scikit-learn", "LangChain", "LangGraph", "FastAPI", "Flask", "Joblib", "SQLite", "Supabase"] },
   { title: "Languages", skills: ["Python", "SQL", "JavaScript", "C", "C++", "C#"] },
   { title: "Product UI", skills: ["React", "Vite", "Tailwind CSS", "TypeScript", "Three.js", "GSAP", "REST APIs"] },
-  { title: "Cloud & MLOps", skills: ["Docker", "Azure", "Vercel", "Render", "CI/CD", "Git", "GitHub", "Model Deployment"] },
+  { title: "Cloud & Enterprise", skills: ["Azure", "AWS", "GCP", "Microsoft 365 Copilot Studio", "Power Automate", "SharePoint", "Teams", "Vercel", "Render"] },
+  { title: "MLOps & Delivery", skills: ["Docker", "CI/CD", "Azure DevSecOps", "Git", "GitHub", "Model Deployment", "Model Serving", "Monitoring", "API Integration"] },
   { title: "IoT & 3D", skills: ["Azure IoT", "Digital Twin", "Raspberry Pi", "Sensors", "VTK.js", "Point Clouds", "3D Evaluation"] },
 ];
 
@@ -705,6 +957,20 @@ const architectures: Architecture[] = [
     desc: "A conceptual architecture for grounded LLM answers over PDFs, URLs, and unstructured documents.",
     nodes: ["Ingestion", "NLP cleaning", "Chunking strategy", "Embedding index", "BM25 recall", "Cross-Encoder rerank", "Grounded generation", "Evaluation"],
     stack: ["FAISS", "BM25", "Cross-Encoder", "LangChain", "FastAPI", "LLM"],
+  },
+  {
+    id: "market-insight",
+    title: "Market Insight AI Agent Flow",
+    desc: "A grounded financial-analysis architecture that combines agent tool-calling, live market data, historical charting, and streamed AI explanation.",
+    nodes: ["Stock query", "FastAPI request layer", "LangGraph tool planner", "Snapshot metrics fetch", "Historical price fetch", "Groq explanation", "Streaming response", "Tool trace + disclaimer"],
+    stack: ["Next.js", "FastAPI", "LangGraph", "Groq", "yFinance", "Recharts"],
+  },
+  {
+    id: "refundcopilot",
+    title: "RefundCopilot AI Agent Flow",
+    desc: "A policy-grounded support-agent architecture for refund decisions with prompt-injection detection, deterministic policy tools, and auditable admin traces.",
+    nodes: ["Customer message", "Injection scan", "Customer/order lookup", "Refund policy engine", "Approve / deny / escalate", "Customer response", "Admin trace log"],
+    stack: ["React", "FastAPI", "SQLite", "Docker", "Policy Engine", "Agentic AI"],
   },
   {
     id: "agentflow",
@@ -737,6 +1003,22 @@ const architectures: Architecture[] = [
 ];
 
 const motionSystems: MotionSystem[] = [
+  {
+    title: "Market Insight AI Agent | Research Workflow",
+    subtitle: "Grounded stock analysis with tools, charts, and streamed explanation",
+    description:
+      "Shows how Market Insight AI Agent accepts a stock query, calls financial tools through LangGraph, returns snapshot metrics and historical price data, and streams a grounded Groq explanation back into the dashboard with a visible tool trace.",
+    steps: ["Stock Query", "FastAPI Intake", "LangGraph Tool Call", "yFinance Snapshot", "Historical Prices", "Chart Data", "Groq Explanation", "Streaming Output", "Tool Trace"],
+    stack: ["Next.js", "FastAPI", "LangGraph", "Groq", "yFinance", "Recharts"],
+  },
+  {
+    title: "RefundCopilot AI Agent | Refund Workflow",
+    subtitle: "Policy-grounded support automation with safety checks",
+    description:
+      "Shows how RefundCopilot receives a refund request, checks prompt-injection signals, verifies customer and order data, applies deterministic refund policy, returns approve, deny, or escalate decisions, and saves an auditable admin trace.",
+    steps: ["Customer Request", "Injection Scan", "Order Lookup", "Policy Check", "Decision Action", "Safe Response", "Admin Trace"],
+    stack: ["FastAPI", "React", "SQLite", "Docker", "Policy Engine", "Agentic AI"],
+  },
   {
     title: "Code Review Bot | PR Review Workflow",
     subtitle: "Multi-agent GitHub review with human-controlled output",
@@ -793,16 +1075,36 @@ const timeline = [
   {
     year: "Jan 2025 - Mar 2026",
     title: "AI/ML Engineer, Havells India Ltd.",
-    desc: "Built ML inference systems, internal AI tools, prediction pipelines, and business-facing AI applications.",
+    desc: "Built PyTorch prediction models, Tri-Branch PointNet inference pipelines, API-driven AI tools, and stakeholder-facing ML interfaces for engineering teams.",
   },
   {
     year: "Mar 2026 - Present",
     title: "Senior Engineer - AI/ML, Havells India Ltd.",
-    desc: "Building AI agents, RAG workflows, internal AI product systems, and model-assisted decision tools.",
+    desc: "Building enterprise GenAI agents, MarketPulse automation with Microsoft 365 Copilot Studio and Power Automate, AI evaluation platforms, RAG workflows, and model-assisted decision tools.",
   },
 ];
 
 const fallbackRepos: Repo[] = [
+  {
+    id: 7,
+    name: "refundpilot-ai-agent",
+    html_url: "https://github.com/Jatin29AFK/refundpilot-ai-agent",
+    description: "RefundCopilot AI agent with prompt-injection defense, deterministic policy checks, FastAPI, React, SQLite, and Docker.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 5,
+    name: "Market-Insight-AI-Agent",
+    html_url: "https://github.com/Jatin29AFK/Market-Insight-AI-Agent",
+    description: "Agentic stock market research assistant with LangGraph, yFinance, Groq, Next.js, charts, and streaming analysis.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "TypeScript",
+    updated_at: new Date().toISOString(),
+  },
   {
     id: 1,
     name: "Agentic-AI-Code-Review-Bot",
@@ -836,12 +1138,52 @@ const fallbackRepos: Repo[] = [
   {
     id: 4,
     name: "Nexora",
-    html_url: "https://github.com/Jatin29AFK/Nexora",
+    html_url: "https://github.com/Jatin29AFK/Nexora--AI_Study_Assistant",
     description: "RAG study assistant for PDFs, URLs, chat, and quizzes.",
     stargazers_count: 0,
     forks_count: 0,
     language: "Python",
     updated_at: new Date().toISOString(),
+  },
+  {
+    id: 9,
+    name: "Hackerrank-Automation",
+    html_url: "https://github.com/Jatin29AFK/Hackerrank-Automation",
+    description: "Puppeteer and Node.js automation for HackerRank login, problem navigation, solving, and submission.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    updated_at: "2024-09-04T05:06:18Z",
+  },
+  {
+    id: 10,
+    name: "Myntra-Clone",
+    html_url: "https://github.com/Jatin29AFK/Myntra-Clone",
+    description: "Responsive Myntra e-commerce UI clone built with HTML and CSS.",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "HTML",
+    updated_at: "2024-01-26T14:36:44Z",
+  },
+  {
+    id: 11,
+    name: "Weather-App",
+    html_url: "https://github.com/Jatin29AFK/Weather-App",
+    description: "Weather forecast application built with HTML, CSS, JavaScript, and a weather API.",
+    stargazers_count: 1,
+    forks_count: 0,
+    language: "JavaScript",
+    updated_at: "2024-01-26T14:21:36Z",
+  },
+  {
+    id: 12,
+    name: "Event-Planner",
+    html_url: "https://github.com/Jatin29AFK/Event-Planner",
+    description: "Responsive event-planner website for services, packages, weddings, parties, and events.",
+    stargazers_count: 1,
+    forks_count: 0,
+    language: "HTML",
+    updated_at: "2024-01-26T14:06:39Z",
   },
 ];
 
@@ -853,6 +1195,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedArchitecture, setSelectedArchitecture] = useState<Architecture | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [contactMode, setContactMode] = useState<ContactMode>("message");
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -925,6 +1268,11 @@ function App() {
     });
   }, []);
 
+  function openContactForm(mode: ContactMode) {
+    setContactMode(mode);
+    window.setTimeout(() => scrollToId("contact"), 0);
+  }
+
   return (
     <main className="theme-bg theme-text ai-grid relative min-h-screen overflow-hidden">
       <NeuralBackground />
@@ -934,12 +1282,12 @@ function App() {
       <Projects onOpenProject={setSelectedProject} />
       <AIMotionSystems onOpenArchitecture={setSelectedArchitecture} />
       <Skills />
-      <RecruiterHub />
+      <RecruiterHub onScheduleInterview={() => openContactForm("interview")} />
       <GitHubActivity />
       <Experience />
-      <Contact />
+      <Contact mode={contactMode} setMode={setContactMode} />
       <Footer />
-      <CommandPalette onOpenProject={setSelectedProject} onOpenChat={() => setChatOpen(true)} />
+      <CommandPalette onOpenProject={setSelectedProject} onOpenChat={() => setChatOpen(true)} onScheduleInterview={() => openContactForm("interview")} />
       <PortfolioChat open={chatOpen} setOpen={setChatOpen} onOpenProject={setSelectedProject} />
       {selectedProject && <CaseStudyModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
       {selectedArchitecture && (
@@ -1075,8 +1423,9 @@ function Hero({ onAsk }: { onAsk: () => void }) {
           </h1>
 
           <p className="hero-reveal text-muted mb-8 max-w-xl text-lg leading-8">
-            2 Years 10 months building AI agents, RAG systems, NLP products, ML inference tools,
-            and full-stack AI applications with Python, FastAPI, PyTorch, LangChain, React, and Azure.
+            3 years building AI agents, RAG systems, NLP products, ML inference tools,
+            enterprise automation, and full-stack AI applications with Python, FastAPI, PyTorch,
+            LangChain, Microsoft 365 Copilot Studio, Power Automate, React, and Azure.
           </p>
 
           <div className="hero-reveal flex flex-wrap gap-4">
@@ -1093,27 +1442,64 @@ function Hero({ onAsk }: { onAsk: () => void }) {
 
           <div className="hero-reveal mt-8 flex flex-wrap gap-3">
             <span className="metric-pill">AI Agents | RAG | NLP</span>
-            <span className="metric-pill">2 Years 10 months Experience</span>
+            <span className="metric-pill">3 Years Experience</span>
             <span className="metric-pill">Open to AI/ML Roles</span>
           </div>
         </div>
 
         <div className="hero-reveal hero-visual h-[620px] min-h-[520px] overflow-hidden">
           <HeroTelemetryOverlay />
-          <Canvas camera={{ position: [0, 0.2, 7.1], fov: 42 }}>
-            <ambientLight intensity={0.75} />
-            <pointLight position={[4, 4, 4]} intensity={2.4} />
-            <pointLight position={[-4, -2, 3]} color="#84cc16" intensity={1.1} />
-            <Stars radius={90} depth={45} count={1500} factor={3} fade speed={1} />
-            <Float speed={1.6} rotationIntensity={0.75} floatIntensity={1.4}>
-              <AIModel />
-            </Float>
-            <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.65} />
-          </Canvas>
+          <HeroScene />
         </div>
       </div>
     </section>
   );
+}
+
+function HeroScene() {
+  const [webglReady] = useState(() => canUseWebGL());
+
+  if (!webglReady) {
+    return (
+      <div className="hero-canvas-fallback" aria-label="AI systems visual">
+        <div className="fallback-orbit fallback-orbit-a" />
+        <div className="fallback-orbit fallback-orbit-b" />
+        <div className="fallback-core">
+          <span>AI</span>
+          <strong>Systems</strong>
+        </div>
+        {["Agents", "RAG", "NLP", "MLOps", "Copilot", "Automation"].map((item, index) => (
+          <span key={item} className={`fallback-node fallback-node-${index + 1}`}>
+            {item}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <Canvas camera={{ position: [0, 0.2, 7.1], fov: 42 }}>
+      <ambientLight intensity={0.75} />
+      <pointLight position={[4, 4, 4]} intensity={2.4} />
+      <pointLight position={[-4, -2, 3]} color="#84cc16" intensity={1.1} />
+      <Stars radius={90} depth={45} count={1500} factor={3} fade speed={1} />
+      <Float speed={1.6} rotationIntensity={0.75} floatIntensity={1.4}>
+        <AIModel />
+      </Float>
+      <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.65} />
+    </Canvas>
+  );
+}
+
+function canUseWebGL() {
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(window.WebGLRenderingContext && (canvas.getContext("webgl2") || canvas.getContext("webgl")));
+  } catch {
+    return false;
+  }
 }
 
 function HeroTelemetryOverlay() {
@@ -1330,9 +1716,9 @@ function About() {
 
           <div className="grid gap-5 md:grid-cols-3 lg:grid-cols-1">
             {[
-              ["AI/ML Fields", "Machine Learning, Deep Learning, Model Inference, Model Evaluation, Experimentation, and Applied AI Product Engineering."],
+              ["AI/ML Fields", "Machine Learning, Deep Learning, Model Inference, Model Evaluation, Experimentation, Model Lifecycle Management, and Applied AI Product Engineering."],
               ["RAG / NLP Fields", "RAG Systems, NLP Pipelines, Information Retrieval, Semantic Search, Document Parsing, and Resume-JD Matching."],
-              ["Agentic / Product Fields", "AI Agents, Agentic Workflows, FastAPI Backends, React Interfaces, Full-Stack AI Systems, and Research-Led System Design."],
+              ["Agentic / Enterprise Fields", "AI Agents, Agentic Workflows, Microsoft 365 Copilot Studio, Power Automate, FastAPI Backends, React Interfaces, and Full-Stack AI Systems."],
             ].map(([title, desc]) => (
               <article key={title} className="glow-card rounded-2xl p-6">
                 <h3 className="mb-3 text-xl font-bold">{title}</h3>
@@ -1443,7 +1829,8 @@ function Skills() {
         <div className="skills-summary glow-card rounded-2xl p-6">
           <p className="text-muted max-w-4xl leading-8">
             Strongest around AI/ML product engineering, RAG systems, NLP workflows, agentic AI applications,
-            FastAPI backends, React frontends, retrieval pipelines, and deployment-ready full-stack AI systems.
+            Microsoft 365 Copilot Studio, Power Automate automation, FastAPI backends, React frontends,
+            retrieval pipelines, and deployment-ready full-stack AI systems.
           </p>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -1465,7 +1852,7 @@ function Skills() {
   );
 }
 
-function RecruiterHub() {
+function RecruiterHub({ onScheduleInterview }: { onScheduleInterview: () => void }) {
   const [copied, setCopied] = useState(false);
   const recruiterSections: {
     label: string;
@@ -1478,7 +1865,7 @@ function RecruiterHub() {
     },
     {
       label: "Experience",
-      items: ["Total Experience: 2 Years 10 months", "Current Role: Senior Engineer - AI/ML", "Previous Role: AI/ML Engineer", "Academic Base: M.Tech CSE, NIT Hamirpur"],
+      items: ["Total Experience: 3 Years", "Current Role: Senior Engineer - AI/ML", "Previous Role: AI/ML Engineer", "Academic Base: M.Tech CSE, NIT Hamirpur"],
     },
     {
       label: "Timeline",
@@ -1491,7 +1878,7 @@ function RecruiterHub() {
     },
     {
       label: "Strongest Areas",
-      items: ["AI Agents and Agentic Workflows", "RAG, NLP, and Semantic Retrieval", "ML Inference Pipelines and FastAPI AI Backends"],
+      items: ["AI Agents and Agentic Workflows", "RAG, NLP, and Semantic Retrieval", "Microsoft 365 Copilot Studio, Power Automate, and FastAPI AI Backends"],
     },
   ];
 
@@ -1538,9 +1925,9 @@ function RecruiterHub() {
               <button onClick={copyEmail} className="ghost-button">
                 {copied ? "Email Copied" : "Copy Email"}
               </button>
-              <a href={`mailto:${email}?subject=Interview%20Opportunity%20for%20AI%20Engineer%20Role`} className="ghost-button">
+              <button onClick={onScheduleInterview} className="ghost-button">
                 Schedule Interview
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -1561,7 +1948,8 @@ function GitHubActivity() {
         const response = await fetch("https://api.github.com/users/Jatin29AFK/repos?sort=updated&per_page=6");
         if (!response.ok) return;
         const data = (await response.json()) as Repo[];
-        const recentRepos = data.filter((repo) => new Date(repo.updated_at).getFullYear() >= 2026).slice(0, 6);
+        const hiddenRepos = new Set(["Jatin29AFK", "ZeroAI_Assessment", "AI-Recruiter-Resume-Screening-Tool"]);
+        const recentRepos = data.filter((repo) => !hiddenRepos.has(repo.name)).slice(0, 14);
         if (!cancelled && recentRepos.length) {
           setRepos(recentRepos);
           setLive(true);
@@ -1581,12 +1969,12 @@ function GitHubActivity() {
   return (
     <section id="github" className="section-pad relative z-10">
       <div className="scroll-reveal mx-auto max-w-7xl">
-        <SectionTitle title="Recent GitHub Projects" subtitle={live ? "2026 repository activity" : "2026 project snapshots with live fetch fallback"} />
+        <SectionTitle title="GitHub Projects" subtitle={live ? "Public repository activity" : "Project snapshots with live fetch fallback"} />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {repos.map((repo) => (
             <a key={repo.id} href={repo.html_url} target="_blank" rel="noreferrer" className="glow-card rounded-2xl p-5 transition hover:-translate-y-1">
               <div className="mb-3 flex items-center justify-between gap-4">
-                <h3 className="font-bold text-cyan-300">{repo.name}</h3>
+                <h3 className="font-bold text-cyan-300">{getRepoDisplayName(repo.name)}</h3>
                 <span className="text-xs text-muted">{repo.language ?? "Code"}</span>
               </div>
               <p className="text-muted min-h-14 text-sm leading-6">{repo.description ?? "AI engineering repository by Jatin Shukla."}</p>
@@ -1623,30 +2011,80 @@ function Experience() {
   );
 }
 
-function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "", website: "" });
+function Contact({
+  mode,
+  setMode,
+}: {
+  mode: ContactMode;
+  setMode: Dispatch<SetStateAction<ContactMode>>;
+}) {
+  const [form, setForm] = useState({ name: "", email: "", company: "", role: "", preferredTime: "", message: "", website: "" });
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  function openMailFallback(values: typeof form) {
+  function openMailFallback(values: ContactFormPayload) {
     const name = values.name.trim();
     const fromEmail = values.email.trim();
+    const company = values.company.trim();
+    const role = values.role.trim();
+    const preferredTime = values.preferredTime.trim();
     const message = values.message.trim();
-    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const subject = encodeURIComponent(mode === "interview" ? `Interview request from ${name}` : `Portfolio contact from ${name}`);
     const body = encodeURIComponent(
-      [`Name: ${name}`, `Email: ${fromEmail}`, "", "Message:", message].join("\n"),
+      [
+        `Type: ${mode === "interview" ? "Interview request" : "Portfolio message"}`,
+        `Name: ${name}`,
+        `Email: ${fromEmail}`,
+        company ? `Company: ${company}` : "",
+        role ? `Role: ${role}` : "",
+        preferredTime ? `Preferred interview time: ${preferredTime}` : "",
+        "",
+        "Message:",
+        message,
+      ].filter(Boolean).join("\n"),
     );
 
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   }
 
+  async function sendViaFormSubmit(payload: ContactFormPayload) {
+    const response = await fetch(formSubmitEndpoint, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        _subject: payload.type === "interview" ? `Interview request from ${payload.name}` : `Portfolio contact from ${payload.name}`,
+        _captcha: "false",
+        _template: "table",
+        _replyto: payload.email,
+        type: payload.type === "interview" ? "Interview request" : "Portfolio message",
+        name: payload.name,
+        email: payload.email,
+        company: payload.company || "Not provided",
+        role: payload.role || "Not provided",
+        preferredTime: payload.preferredTime || "Not provided",
+        message: payload.message,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("FormSubmit delivery failed.");
+    }
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const payload = {
+    const payload: ContactFormPayload = {
+      type: mode,
       name: form.name.trim(),
       email: form.email.trim(),
+      company: form.company.trim(),
+      role: form.role.trim(),
+      preferredTime: form.preferredTime.trim(),
       message: form.message.trim(),
       website: form.website.trim(),
     };
@@ -1661,8 +2099,15 @@ function Contact() {
       return;
     }
 
+    if (mode === "interview" && (!payload.role || !payload.preferredTime)) {
+      setStatus("Please add the role and preferred interview time.");
+      return;
+    }
+
     setSubmitting(true);
     setStatus("");
+
+    let delivered = false;
 
     try {
       const response = await fetch("/api/contact", {
@@ -1673,28 +2118,27 @@ function Contact() {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        let errorMessage = "The contact form is unavailable right now.";
+      delivered = response.ok;
+    } catch (error) {
+      console.error("Contact API error:", error);
+    }
 
-        try {
-          const result = (await response.json()) as { error?: string };
-          if (result.error) errorMessage = result.error;
-        } catch {
-          errorMessage = "The contact form is unavailable right now.";
-        }
-
+    if (!delivered) {
+      try {
+        await sendViaFormSubmit(payload);
+        delivered = true;
+      } catch (fallbackError) {
+        console.error("Contact fallback error:", fallbackError);
         openMailFallback(payload);
-        setStatus(`${errorMessage} Your email app has been opened as a fallback.`);
+        setStatus("Email delivery could not be confirmed, so your email app has been opened with the details prefilled.");
         setSubmitting(false);
         return;
       }
+    }
 
-      setForm({ name: "", email: "", message: "", website: "" });
-      setStatus("Message sent successfully. I will get back to you soon.");
-    } catch (error) {
-      console.error("Contact form error:", error);
-      openMailFallback(payload);
-      setStatus("Direct form delivery is unavailable right now. Your email app has been opened as a fallback.");
+    try {
+      setForm({ name: "", email: "", company: "", role: "", preferredTime: "", message: "", website: "" });
+      setStatus(mode === "interview" ? "Interview request sent successfully. I will get back to you soon." : "Message sent successfully. I will get back to you soon.");
     } finally {
       setSubmitting(false);
     }
@@ -1733,8 +2177,23 @@ function Contact() {
           </div>
 
           <form onSubmit={handleSubmit} className="glow-card rounded-2xl p-8">
+            <div className="contact-mode-toggle" aria-label="Contact form type">
+              <button type="button" className={mode === "message" ? "active" : ""} onClick={() => setMode("message")}>
+                Message
+              </button>
+              <button type="button" className={mode === "interview" ? "active" : ""} onClick={() => setMode("interview")}>
+                Interview
+              </button>
+            </div>
             <FormField label="Name" value={form.name} onChange={(value) => setForm((prev) => ({ ...prev, name: value }))} placeholder="Your name" />
             <FormField label="Email" type="email" value={form.email} onChange={(value) => setForm((prev) => ({ ...prev, email: value }))} placeholder="your.email@example.com" />
+            {mode === "interview" && (
+              <>
+                <FormField label="Company" value={form.company} onChange={(value) => setForm((prev) => ({ ...prev, company: value }))} placeholder="Company name" />
+                <FormField label="Role" value={form.role} onChange={(value) => setForm((prev) => ({ ...prev, role: value }))} placeholder="Role or opportunity" />
+                <FormField label="Preferred interview time" type="datetime-local" value={form.preferredTime} onChange={(value) => setForm((prev) => ({ ...prev, preferredTime: value }))} placeholder="Preferred time" />
+              </>
+            )}
             <input
               type="text"
               tabIndex={-1}
@@ -1750,14 +2209,14 @@ function Contact() {
                 className="input-field min-h-36 resize-none"
                 value={form.message}
                 onChange={(event) => setForm((prev) => ({ ...prev, message: event.target.value }))}
-                placeholder="Write your message..."
+                placeholder={mode === "interview" ? "Add interview context, job details, or coordination notes..." : "Write your message..."}
               />
             </div>
             <button type="submit" disabled={submitting} className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60">
-              {submitting ? "Sending..." : "Send Message"}
+              {submitting ? "Sending..." : mode === "interview" ? "Send Interview Request" : "Send Message"}
             </button>
             <p className="text-muted mt-3 text-xs leading-6">
-              If the built-in form is unavailable, the portfolio will open your email app with the message prefilled.
+              Direct delivery sends to {email}; if it is unavailable, your email app opens with the details prefilled.
             </p>
             {status && <p className="mt-4 text-sm text-cyan-300">{status}</p>}
           </form>
@@ -1800,7 +2259,7 @@ function PortfolioChat({
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      text: "Portfolio assistant online. Ask me about Jatin's AI agents, code review bot, RAG systems, NLP projects, ML experience, resume, contact, or role fit.",
+      text: "Portfolio assistant online. Ask me about Jatin's AI agents, Market Insight AI Agent, RefundCopilot AI Agent, MarketPulse automation, Copilot Studio, Power Automate, RAG systems, ML experience, resume, contact, interview scheduling, or role fit.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -1837,7 +2296,7 @@ function PortfolioChat({
             ))}
           </div>
           <div className="flex flex-wrap gap-2 px-4 pb-3">
-            {["What AI projects has Jatin built?", "Tell me about AgentFlow", "Tell me about the Code Review Bot", "Does Jatin know RAG?", "How can I contact Jatin?"].map((question) => (
+            {["What AI projects has Jatin built?", "Tell me about RefundCopilot AI Agent", "Tell me about Market Insight AI Agent", "Does Jatin know Copilot Studio?", "Does Jatin know RAG?", "Schedule an interview"].map((question) => (
               <button key={question} onClick={() => submitQuestion(question)} className="quick-question">
                 {question}
               </button>
@@ -1869,9 +2328,11 @@ function PortfolioChat({
 function CommandPalette({
   onOpenProject,
   onOpenChat,
+  onScheduleInterview,
 }: {
   onOpenProject: (project: Project) => void;
   onOpenChat: () => void;
+  onScheduleInterview: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -1884,6 +2345,7 @@ function CommandPalette({
       { label: "Go to Recruiters", hint: "Open hiring quick actions", action: () => scrollToId("recruiters") },
       { label: "Go to Architecture Lab", hint: "Open AI system diagrams", action: () => scrollToId("architecture") },
       { label: "Go to Contact", hint: "Open contact form", action: () => scrollToId("contact") },
+      { label: "Schedule Interview", hint: "Open interview request form", action: onScheduleInterview },
       { label: "View GitHub", hint: githubUrl, action: () => window.open(githubUrl, "_blank") },
       ...projects.map((project) => ({
         label: `Open ${project.shortTitle}`,
@@ -1891,7 +2353,7 @@ function CommandPalette({
         action: () => onOpenProject(project),
       })),
     ],
-    [onOpenChat, onOpenProject],
+    [onOpenChat, onOpenProject, onScheduleInterview],
   );
 
   useEffect(() => {
@@ -2033,9 +2495,9 @@ function CaseStudyModal({ project, onClose }: { project: Project; onClose: () =>
                 <img src={project.image} alt={`${project.shortTitle} platform preview`} />
                 <div>
                   <p>
-                    AgentFlow is presented as a product-style multi-agent platform case study. The focus is on a
-                    FastAPI + LangGraph workflow with Groq agents, SQLite memory, backend tools, reviewer scoring,
-                    human review, workspace isolation, and traceable execution history.
+                    {project.shortTitle} is presented as a project-style case study. {project.desc}
+                    The focus is on the workflow, architecture, implementation choices, and engineering tradeoffs
+                    behind the repository.
                   </p>
                   <a href={project.link} target="_blank" rel="noreferrer" className="primary-button small-button">
                     GitHub Link
@@ -2257,8 +2719,20 @@ function answerPortfolioQuestion(question: string) {
     hasApproxTerm(signals, ["code review bot", "code reviewer", "review bot", "pull request review", "pr review", "agentic ai code review bot"], 2) ||
     ((q.includes("code review") || q.includes("pull request")) && (q.includes("bot") || q.includes("github") || q.includes("review")));
   const asksAgentFlow = hasApproxTerm(signals, ["agentflow", "agent flow", "agentfow", "multi-agent", "multiagent", "agentic", "orchestration"], 2);
-  const asksHireFit = hasApproxTerm(signals, ["hirefit", "hire fit"], 1) || q.includes("resume") || q.includes("job");
+  const asksMarketInsight =
+    hasApproxTerm(signals, ["market insight", "market-insight", "stock market", "stock analysis"], 2) ||
+    q.includes("yfinance") ||
+    q.includes("stock");
+  const asksHireFit =
+    hasApproxTerm(signals, ["hirefit", "hire fit", "resume matcher", "resume jd", "jd matching"], 2) ||
+    q.includes("job description") ||
+    q.includes("ats") ||
+    q.includes("jd match");
   const asksNexora = hasApproxTerm(signals, ["nexora"], 1) || q.includes("rag") || q.includes("pdf") || q.includes("bm25") || q.includes("faiss");
+  const asksAutomation =
+    hasApproxTerm(signals, ["marketpulse", "market pulse", "copilot studio", "power automate", "sharepoint", "microsoft 365", "teams automation"], 2) ||
+    q.includes("automation");
+  const asksRefundCopilot = hasApproxTerm(signals, ["refundcopilot", "refund copilot", "refundpilot", "refund pilot", "refund agent", "refund policy"], 2);
 
   if (
     q.includes("contact") ||
@@ -2270,9 +2744,15 @@ function answerPortfolioQuestion(question: string) {
     q.includes("no.") ||
     q.includes("call") ||
     q.includes("reach") ||
-    q.includes("linkedin")
+    q.includes("linkedin") ||
+    q.includes("interview") ||
+    q.includes("schedule")
   ) {
-    return `Contact Jatin at ${phone} or ${email}. LinkedIn: ${linkedInUrl}. GitHub: ${githubUrl}.`;
+    return `Contact Jatin at ${phone} or ${email}. For interviews, use the Interview tab in the contact form so role, company, preferred time, and message are emailed directly. LinkedIn: ${linkedInUrl}. GitHub: ${githubUrl}.`;
+  }
+
+  if (q.includes("resume") || q.includes("cv")) {
+    return "Jatin's latest resume is available from the Download Resume buttons on the portfolio. It highlights 3 years of AI/ML experience, GenAI and agent systems, RAG, ML inference, Microsoft 365 Copilot Studio, Power Automate, Azure, cloud deployment, and enterprise automation work.";
   }
 
   if (asksCodeReviewBot) {
@@ -2283,35 +2763,55 @@ function answerPortfolioQuestion(question: string) {
     return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, LangChain, React, SQLite, Vite, and Tailwind. It includes semantic memory with optional embeddings and lexical fallback, SSE workflow streaming, role-configurable Groq/OpenAI/Ollama providers, Wikipedia and arXiv research tools, reviewer scoring, optional human-review webhooks, workspace isolation, direct chat, and searchable/exportable run history. The deployed API also uses retries, rate limits, request IDs, structured logs, and SQLite WAL mode. Live demo: https://agent-flow-five-phi.vercel.app";
   }
 
+  if (asksMarketInsight) {
+    return "Market Insight AI Agent is Jatin's full-stack agentic stock research assistant. It uses a FastAPI backend, LangGraph tool-calling workflow, yFinance market data, Groq explanations, a Next.js dashboard, Recharts-based historical price visualization, streaming responses, and visible tool traces so stock insights stay grounded in fetched financial data.";
+  }
+
   if (asksHireFit) {
     return "HireFit is an applicant-focused NLP resume-JD matcher. It uses resume/JD parsing, NLP preprocessing, TF-IDF, cosine similarity, skill-gap analysis, ATS keyword audit, and Gemini-based explanation to help applicants improve role fit before applying.";
   }
 
+  if (asksRefundCopilot) {
+    return "RefundCopilot AI Agent is Jatin's policy-grounded refund support agent. It uses FastAPI, React, SQLite, Docker, deterministic refund-policy checks, prompt-injection detection, approve/deny/escalate actions, and admin traces with tool calls, reason codes, and trace IDs.";
+  }
+
   if (q.includes("project") || q.includes("built") || q.includes("case stud")) {
-    return "Jatin's featured AI projects are AgentFlow for multi-agent orchestration, Agentic AI Code Review Bot for GitHub PR review automation, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research for smart post-harvest storage.";
+    return "Jatin's featured AI projects include AgentFlow for multi-agent orchestration, Market Insight AI Agent for grounded stock research, RefundCopilot AI Agent for policy-grounded support automation, Agentic AI Code Review Bot for GitHub PR review automation, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research.";
   }
 
   if (asksNexora) {
     return "Yes. Jatin has strong RAG experience through Nexora: PDF/URL ingestion, chunking, FAISS + BM25 retrieval, Cross-Encoder reranking, and LLM-based answers and quiz generation.";
   }
 
-  if (q.includes("ml") || q.includes("machine") || q.includes("pytorch") || q.includes("experience")) {
-    return "Jatin has 2.9+ years of total AI/ML experience across Senior Engineer - AI/ML, AI/ML Engineer, M.Tech research, ML inference tools, RAG products, FastAPI backends, React interfaces, AI agents, and IoT Digital Twin research.";
+  if (asksAutomation) {
+    return "Yes. Jatin has enterprise automation experience with Microsoft 365 Copilot Studio, Power Automate, SharePoint, and Teams. His MarketPulse work automates competitor monitoring, validation flows, Teams alerts, weekly digests, and monthly leadership reports.";
+  }
+
+  if (q.includes("ml") || q.includes("machine") || q.includes("pytorch") || q.includes("tensorflow") || q.includes("experience")) {
+    return "Jatin has 3 years of total AI/ML experience across Senior Engineer - AI/ML, AI/ML Engineer, M.Tech research, GenAI agents, RAG products, ML inference tools, FastAPI backends, React interfaces, Microsoft 365 automation, and IoT Digital Twin research.";
   }
 
   if (q.includes("role") || q.includes("hire") || q.includes("why") || q.includes("fit")) {
-    return "Best-fit roles for Jatin include Senior AI/ML Engineer, AI/ML Engineer, RAG Engineer, NLP Engineer, Applied AI Engineer, and Full-Stack AI Developer roles.";
+    return "Best-fit roles for Jatin include Senior AI/ML Engineer, AI/ML Engineer, Agentic AI Engineer, RAG Engineer, NLP Engineer, Applied AI Engineer, and Full-Stack AI Developer roles.";
   }
 
   if (q.includes("research") || q.includes("digital twin") || q.includes("iot")) {
     return "Jatin's research/project work includes an IoT Digital Twin for smart post-harvest storage using Raspberry Pi sensors, Azure IoT Hub, digital twin modeling, and ML-oriented monitoring.";
   }
 
-  if (q.includes("skill") || q.includes("tech")) {
-    return "Jatin's toolkit includes Python, SQL, JavaScript, C, C++, C#, PyTorch, Scikit-learn, ML, DL, NLP, RAG, GenAI, AI agents, LangGraph, LangChain, Groq, multi-agent orchestration, FAISS, BM25, Cross-Encoder reranking, FastAPI, Flask, React, Docker, Azure, Vercel, Render, Git, and GitHub.";
+  if (q.includes("education") || q.includes("degree") || q.includes("m.tech") || q.includes("mtech") || q.includes("cgpa") || q.includes("nit")) {
+    return "Jatin completed an M.Tech in Computer Science and Engineering from NIT Hamirpur with a 9.15/10 CGPA, and a B.Tech in Chemical Engineering from IET Lucknow with a 7.8/10 CGPA.";
   }
 
-  return "Portfolio summary: Jatin is a Senior AI/ML Engineer focused on AI agents, multi-agent platforms, RAG, NLP, ML inference systems, and full-stack AI products. Try asking about AgentFlow, HireFit, Nexora, skills, experience, roles, or contact.";
+  if (q.includes("cloud") || q.includes("azure") || q.includes("aws") || q.includes("gcp") || q.includes("deployment")) {
+    return "Jatin works across Azure, AWS, GCP, Vercel, Render, Supabase, Docker, CI/CD, Azure DevSecOps, FastAPI deployment, model serving, monitoring, and API integration.";
+  }
+
+  if (q.includes("skill") || q.includes("tech")) {
+    return "Jatin's toolkit includes Python, SQL, JavaScript, C, C++, C#, PyTorch, TensorFlow, Scikit-learn, ML, DL, NLP, RAG, GenAI, AI agents, LangGraph, LangChain, LlamaIndex, Groq, Hugging Face, FAISS, BM25, Cross-Encoder reranking, FastAPI, Flask, React, Docker, Azure, AWS, GCP, Microsoft 365 Copilot Studio, Power Automate, SharePoint, Teams, Vercel, Render, Git, and GitHub.";
+  }
+
+  return "Portfolio summary: Jatin is a Senior AI/ML Engineer focused on AI agents, multi-agent platforms, enterprise automation, grounded finance AI, RAG, NLP, ML inference systems, and full-stack AI products. Try asking about Market Insight AI Agent, RefundCopilot AI Agent, AgentFlow, MarketPulse automation, Copilot Studio, HireFit, Nexora, skills, experience, roles, or contact.";
 }
 
 function scrollToId(id: string) {
@@ -2320,6 +2820,12 @@ function scrollToId(id: string) {
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(new Date(value));
+}
+
+function getRepoDisplayName(name: string) {
+  if (name === "refundpilot-ai-agent") return "RefundCopilot AI Agent";
+  if (name === "Market-Insight-AI-Agent") return "Market Insight AI Agent";
+  return name;
 }
 
 function useEscape(callback: () => void) {

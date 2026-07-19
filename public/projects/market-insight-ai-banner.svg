@@ -1,0 +1,105 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="96" x2="1490" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07111F"/>
+      <stop offset="1" stop-color="#0B2030"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="152" y1="184" x2="1450" y2="780" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22D3EE" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#34D399" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="chart" x1="1046" y1="248" x2="1290" y2="552" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <filter id="blur" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="42" fill="url(#bg)"/>
+  <g filter="url(#blur)" opacity="0.35">
+    <circle cx="258" cy="184" r="130" fill="#22D3EE"/>
+    <circle cx="1272" cy="218" r="150" fill="#34D399"/>
+    <circle cx="1210" cy="736" r="170" fill="#0EA5E9"/>
+  </g>
+
+  <rect x="64" y="64" width="1472" height="772" rx="34" fill="url(#glow)" stroke="#334155"/>
+
+  <rect x="120" y="132" width="680" height="604" rx="28" fill="#081421" stroke="#163147"/>
+  <text x="160" y="220" fill="#A5F3FC" font-family="Arial, sans-serif" font-size="28" font-weight="700">AI Finance Project</text>
+  <text x="160" y="300" fill="white" font-family="Arial, sans-serif" font-size="62" font-weight="700">Market Insight AI Agent</text>
+  <text x="160" y="356" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="26">
+    <tspan x="160" dy="0">Agentic stock market research assistant with grounded market data,</tspan>
+    <tspan x="160" dy="40">historical charts, streaming explanation, and visible tool traces.</tspan>
+  </text>
+
+  <rect x="160" y="430" width="146" height="44" rx="22" fill="#0F2B39" stroke="#155E75"/>
+  <text x="192" y="459" fill="#67E8F9" font-family="Arial, sans-serif" font-size="22" font-weight="700">FastAPI</text>
+
+  <rect x="322" y="430" width="170" height="44" rx="22" fill="#0F2B39" stroke="#155E75"/>
+  <text x="354" y="459" fill="#67E8F9" font-family="Arial, sans-serif" font-size="22" font-weight="700">LangGraph</text>
+
+  <rect x="508" y="430" width="132" height="44" rx="22" fill="#0F2B39" stroke="#155E75"/>
+  <text x="543" y="459" fill="#67E8F9" font-family="Arial, sans-serif" font-size="22" font-weight="700">Groq</text>
+
+  <rect x="656" y="430" width="144" height="44" rx="22" fill="#0F2B39" stroke="#155E75"/>
+  <text x="689" y="459" fill="#67E8F9" font-family="Arial, sans-serif" font-size="22" font-weight="700">yFinance</text>
+
+  <rect x="160" y="506" width="170" height="44" rx="22" fill="#112B20" stroke="#166534"/>
+  <text x="196" y="535" fill="#86EFAC" font-family="Arial, sans-serif" font-size="22" font-weight="700">Next.js</text>
+
+  <rect x="346" y="506" width="174" height="44" rx="22" fill="#112B20" stroke="#166534"/>
+  <text x="379" y="535" fill="#86EFAC" font-family="Arial, sans-serif" font-size="22" font-weight="700">Recharts</text>
+
+  <rect x="536" y="506" width="198" height="44" rx="22" fill="#112B20" stroke="#166534"/>
+  <text x="568" y="535" fill="#86EFAC" font-family="Arial, sans-serif" font-size="22" font-weight="700">Streaming UX</text>
+
+  <rect x="160" y="604" width="590" height="92" rx="24" fill="#0C1D2B" stroke="#1E3A4B"/>
+  <text x="190" y="643" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="24" font-weight="700">Research-first financial assistant</text>
+  <text x="190" y="677" fill="#94A3B8" font-family="Arial, sans-serif" font-size="21">Deterministic metrics, chart context, AI explanation, and responsible-use framing.</text>
+
+  <rect x="874" y="144" width="590" height="292" rx="28" fill="#091622" stroke="#173044"/>
+  <text x="916" y="198" fill="#A5F3FC" font-family="Arial, sans-serif" font-size="24" font-weight="700">Stock Snapshot</text>
+
+  <rect x="916" y="226" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="942" y="256" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Price</text>
+  <text x="942" y="286" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">$214.80</text>
+
+  <rect x="1092" y="226" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="1120" y="256" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">P/E</text>
+  <text x="1120" y="286" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">28.6</text>
+
+  <rect x="1268" y="226" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="1296" y="256" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">EPS</text>
+  <text x="1296" y="286" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">7.91</text>
+
+  <rect x="916" y="324" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="944" y="354" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Margin</text>
+  <text x="944" y="384" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">24.2%</text>
+
+  <rect x="1092" y="324" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="1118" y="354" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Rev Growth</text>
+  <text x="1118" y="384" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="700">11.4%</text>
+
+  <rect x="1268" y="324" width="150" height="76" rx="20" fill="#0D2030"/>
+  <text x="1294" y="354" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">52W Range</text>
+  <text x="1294" y="384" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="700">148 - 231</text>
+
+  <rect x="874" y="468" width="590" height="268" rx="28" fill="#091622" stroke="#173044"/>
+  <text x="916" y="522" fill="#A5F3FC" font-family="Arial, sans-serif" font-size="24" font-weight="700">Historical Trend + Agent Trace</text>
+
+  <path d="M930 640C972 632 1016 610 1054 626C1092 642 1126 584 1168 586C1210 588 1236 548 1276 558C1316 568 1362 490 1408 516" stroke="url(#chart)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="1054" cy="626" r="8" fill="#22D3EE"/>
+  <circle cx="1168" cy="586" r="8" fill="#22D3EE"/>
+  <circle cx="1408" cy="516" r="8" fill="#34D399"/>
+
+  <rect x="930" y="666" width="156" height="42" rx="21" fill="#0F2B39" stroke="#155E75"/>
+  <text x="963" y="693" fill="#67E8F9" font-family="Arial, sans-serif" font-size="20" font-weight="700">Tool: Snapshot</text>
+
+  <rect x="1104" y="666" width="178" height="42" rx="21" fill="#0F2B39" stroke="#155E75"/>
+  <text x="1138" y="693" fill="#67E8F9" font-family="Arial, sans-serif" font-size="20" font-weight="700">Tool: Price History</text>
+
+  <rect x="1300" y="666" width="128" height="42" rx="21" fill="#112B20" stroke="#166534"/>
+  <text x="1336" y="693" fill="#86EFAC" font-family="Arial, sans-serif" font-size="20" font-weight="700">Groq</text>
+</svg>

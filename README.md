@@ -13,6 +13,7 @@ https://port-folio-alpha-black.vercel.app
 - AI/ML engineering profile
 - RAG and NLP project showcase
 - Agentic AI and full-stack AI positioning
+- Microsoft 365 Copilot Studio and Power Automate automation positioning
 - Detailed case-study presentation
 - Research publication and system-design thinking
 
@@ -21,6 +22,8 @@ https://port-folio-alpha-black.vercel.app
 - Interactive 3D AI hero scene built with React Three Fiber and Drei
 - AI-style "Ask My Portfolio" assistant for quick portfolio queries
 - Project case studies with detailed workflows, concepts, tech stack, and reasoning
+- Contact and interview-request form backed by Resend email delivery
+- FormSubmit fallback for contact and interview requests when Resend is not configured
 - Demo video previews for HireFit and Nexora
 - Research project presentation for IoT Digital Twin work with attached paper
 - Systems Lab section combining project workflows and architecture thinking
@@ -32,15 +35,31 @@ https://port-folio-alpha-black.vercel.app
 
 ## Featured Projects
 
-### 1. HireFit | AI Resume and Job Matcher
+### 1. AgentFlow | Multi-Agent AI Platform
+
+Full-stack multi-agent orchestration platform with LangGraph, FastAPI, semantic memory, streaming traces, and human review.
+
+### 2. Agentic AI Code Review Bot
+
+Multi-agent GitHub PR reviewer with risk scoring, comment previews, test suggestions, and human-reviewable autofix drafts.
+
+### 3. RefundCopilot AI Agent
+
+Policy-grounded refund support agent with prompt-injection defense, deterministic refund checks, admin traces, FastAPI, React, SQLite, and Docker.
+
+### 4. Market Insight AI Agent
+
+Agentic stock market research assistant with FastAPI, LangGraph, yFinance, Groq, Next.js, charting, streaming responses, and visible tool traces.
+
+### 5. HireFit | AI Resume and Job Matcher
 
 Applicant-focused NLP project that helps users compare resumes with job descriptions, identify skill gaps, understand ATS alignment, and receive grounded improvement suggestions.
 
-### 2. Nexora | RAG Study Assistant
+### 6. Nexora | RAG Study Assistant
 
 RAG-based study assistant for PDFs and URLs that supports grounded question answering and quiz generation.
 
-### 3. IoT Digital Twin for Smart Storage
+### 7. IoT Digital Twin for Smart Storage
 
 Research-oriented project focused on IoT telemetry, Azure IoT concepts, and digital twin modeling for post-harvest storage monitoring.
 
@@ -82,6 +101,9 @@ Research-oriented project focused on IoT telemetry, Azure IoT concepts, and digi
 - Cross-Encoder reranking
 - AI Agents
 - Agentic AI workflows
+- Microsoft 365 Copilot Studio
+- Power Automate
+- SharePoint and Teams automation
 
 ## Portfolio Sections
 
@@ -140,7 +162,7 @@ CONTACT_TO_EMAIL=shukla.jeetu2550@gmail.com
 ```
 
 For production, replace `onboarding@resend.dev` with an address from a verified Resend domain.
-The contact form can still fall back to the visitor's email app if direct delivery is unavailable.
+The contact and interview-request forms try `/api/contact` first. If Resend is not configured, the app falls back to FormSubmit and then to the visitor's email app only if delivery cannot be confirmed.
 
 ### 4. Start the development server
 

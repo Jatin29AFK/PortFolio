@@ -306,6 +306,38 @@ body {
   box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
 }
 
+.contact-mode-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.contact-mode-toggle button {
+  min-height: 2.45rem;
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 800;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.contact-mode-toggle button.active {
+  background: var(--accent);
+  color: #020617;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.22);
+}
+
+:root[data-theme="light"] .contact-mode-toggle {
+  background: rgba(255, 255, 255, 0.72);
+}
+
 .neural-line {
   stroke-dasharray: 8;
   animation: dashMove 5s linear infinite;
@@ -583,6 +615,111 @@ body {
     radial-gradient(circle at 18% 22%, rgba(245, 158, 11, 0.12), transparent 28%);
   animation: hologramSweep 6s linear infinite;
   pointer-events: none;
+}
+
+.hero-canvas-fallback {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  min-height: 620px;
+  overflow: hidden;
+}
+
+.fallback-core {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: min(42vw, 15rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(34, 211, 238, 0.34);
+  border-radius: 50%;
+  background: rgba(2, 6, 23, 0.48);
+  color: #e0f2fe;
+  box-shadow:
+    0 0 42px rgba(34, 211, 238, 0.22),
+    inset 0 0 36px rgba(132, 204, 22, 0.1);
+}
+
+.fallback-core span {
+  font-size: clamp(2.6rem, 8vw, 5.8rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.fallback-core strong {
+  color: #bef264;
+  font-size: 0.84rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.fallback-orbit {
+  position: absolute;
+  z-index: 1;
+  width: min(78vw, 34rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 50%;
+  animation: fallbackSpin 14s linear infinite;
+}
+
+.fallback-orbit-b {
+  width: min(62vw, 27rem);
+  border-color: rgba(132, 204, 22, 0.2);
+  animation-duration: 19s;
+  animation-direction: reverse;
+  transform: rotate(24deg);
+}
+
+.fallback-node {
+  position: absolute;
+  z-index: 3;
+  min-width: 5.75rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.66);
+  color: #bae6fd;
+  padding: 0.45rem 0.8rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.14);
+}
+
+.fallback-node-1 {
+  left: 14%;
+  top: 25%;
+}
+
+.fallback-node-2 {
+  right: 15%;
+  top: 27%;
+}
+
+.fallback-node-3 {
+  left: 11%;
+  bottom: 29%;
+}
+
+.fallback-node-4 {
+  right: 13%;
+  bottom: 30%;
+}
+
+.fallback-node-5 {
+  top: 13%;
+}
+
+.fallback-node-6 {
+  bottom: 14%;
+}
+
+:root[data-theme="light"] .fallback-core,
+:root[data-theme="light"] .fallback-node {
+  background: rgba(255, 255, 255, 0.76);
+  color: #075985;
 }
 
 .data-rain span {
@@ -1637,6 +1774,12 @@ body {
   100% {
     opacity: 0;
     transform: translateY(34rem);
+  }
+}
+
+@keyframes fallbackSpin {
+  to {
+    rotate: 360deg;
   }
 }
 
