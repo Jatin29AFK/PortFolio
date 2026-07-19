@@ -768,6 +768,7 @@ const projects: Project[] = [
         desc: "Multi-stock comparison workspace that lets users load up to five symbols side by side and compare headline valuation and business-health metrics quickly.",
       },
     ],
+    video: "/videos/market-insight-demo.webm",
   },
   {
     id: "nexora",
@@ -1137,7 +1138,7 @@ const fallbackRepos: Repo[] = [
   },
   {
     id: 4,
-    name: "Nexora",
+    name: "Nexora--AI_Study_Assistant",
     html_url: "https://github.com/Jatin29AFK/Nexora--AI_Study_Assistant",
     description: "RAG study assistant for PDFs, URLs, chat, and quizzes.",
     stargazers_count: 0,
@@ -1155,36 +1156,16 @@ const fallbackRepos: Repo[] = [
     language: "JavaScript",
     updated_at: "2024-09-04T05:06:18Z",
   },
-  {
-    id: 10,
-    name: "Myntra-Clone",
-    html_url: "https://github.com/Jatin29AFK/Myntra-Clone",
-    description: "Responsive Myntra e-commerce UI clone built with HTML and CSS.",
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "HTML",
-    updated_at: "2024-01-26T14:36:44Z",
-  },
-  {
-    id: 11,
-    name: "Weather-App",
-    html_url: "https://github.com/Jatin29AFK/Weather-App",
-    description: "Weather forecast application built with HTML, CSS, JavaScript, and a weather API.",
-    stargazers_count: 1,
-    forks_count: 0,
-    language: "JavaScript",
-    updated_at: "2024-01-26T14:21:36Z",
-  },
-  {
-    id: 12,
-    name: "Event-Planner",
-    html_url: "https://github.com/Jatin29AFK/Event-Planner",
-    description: "Responsive event-planner website for services, packages, weddings, parties, and events.",
-    stargazers_count: 1,
-    forks_count: 0,
-    language: "HTML",
-    updated_at: "2024-01-26T14:06:39Z",
-  },
+];
+
+const curatedRepoNames = [
+  "AgentFlow--Multi-Agent-AI-Platform",
+  "Agentic-AI-Code-Review-Bot",
+  "refundpilot-ai-agent",
+  "Market-Insight-AI-Agent",
+  "HireFit---AI_Resume_Job_Matcher",
+  "Nexora--AI_Study_Assistant",
+  "Hackerrank-Automation",
 ];
 
 function App() {
@@ -1945,13 +1926,16 @@ function GitHubActivity() {
 
     async function loadRepos() {
       try {
-        const response = await fetch("https://api.github.com/users/Jatin29AFK/repos?sort=updated&per_page=6");
+        const response = await fetch("https://api.github.com/users/Jatin29AFK/repos?sort=updated&per_page=100");
         if (!response.ok) return;
         const data = (await response.json()) as Repo[];
-        const hiddenRepos = new Set(["Jatin29AFK", "ZeroAI_Assessment", "AI-Recruiter-Resume-Screening-Tool"]);
-        const recentRepos = data.filter((repo) => !hiddenRepos.has(repo.name)).slice(0, 14);
-        if (!cancelled && recentRepos.length) {
-          setRepos(recentRepos);
+        const fetchedRepos = new Map(data.map((repo) => [repo.name, repo]));
+        const curatedRepos = curatedRepoNames
+          .map((name) => fetchedRepos.get(name) ?? fallbackRepos.find((repo) => repo.name === name))
+          .filter((repo): repo is Repo => Boolean(repo));
+
+        if (!cancelled && curatedRepos.length) {
+          setRepos(curatedRepos);
           setLive(true);
         }
       } catch {
@@ -2823,8 +2807,13 @@ function formatDate(value: string) {
 }
 
 function getRepoDisplayName(name: string) {
+  if (name === "AgentFlow--Multi-Agent-AI-Platform") return "AgentFlow";
+  if (name === "Agentic-AI-Code-Review-Bot") return "Agentic AI Code Review Bot";
   if (name === "refundpilot-ai-agent") return "RefundCopilot AI Agent";
   if (name === "Market-Insight-AI-Agent") return "Market Insight AI Agent";
+  if (name === "HireFit---AI_Resume_Job_Matcher") return "HireFit";
+  if (name === "Nexora--AI_Study_Assistant") return "Nexora";
+  if (name === "Hackerrank-Automation") return "Hackerrank Automation";
   return name;
 }
 
