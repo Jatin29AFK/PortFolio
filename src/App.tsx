@@ -3,6 +3,9 @@ import type { Dispatch, FormEvent, SetStateAction } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls, Stars, Text } from "@react-three/drei";
 import type { Group } from "three";
+import { profile } from "./profile";
+import { answerPortfolioQuestion } from "./portfolioAssistant";
+import type { AssistantAnswer } from "./portfolioAssistant";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -92,13 +95,9 @@ type MotionSystem = {
   stack: string[];
 };
 
-const resumePath = "/Resume/JatinShukla_resume.pdf";
+const { resumePath, email, phone, githubUrl, linkedInUrl } = profile;
 const profilePhotoPath = "/Resume/1774121399635.png";
-const email = "shukla.jeetu2550@gmail.com";
 const formSubmitEndpoint = `https://formsubmit.co/ajax/${email}`;
-const phone = "+91-9116237146";
-const githubUrl = "https://github.com/Jatin29AFK";
-const linkedInUrl = "https://www.linkedin.com/in/jatin-shukla-401739202/";
 
 const navLinks = [
   { label: "Projects", href: "#projects" },
@@ -933,14 +932,15 @@ const projects: Project[] = [
 
 const skillGroups = [
   { title: "AI/ML Core", skills: ["Machine Learning", "Deep Learning", "Feature Engineering", "EDA", "Model Evaluation", "Regression", "Classification", "Clustering", "Experimentation", "Model Lifecycle Management"] },
-  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "LangGraph", "LangChain", "LlamaIndex", "Groq", "Multi-Agent Orchestration", "Agentic Workflows", "Prompt Engineering", "Context Grounding", "Tool Calling", "Human-in-the-Loop AI"] },
+  { title: "GenAI & Agents", skills: ["Generative AI", "LLM Apps", "AI Agents", "Agentic AI", "LangGraph", "LangChain", "LlamaIndex", "Groq", "Multi-Agent Orchestration", "Agentic Workflows", "Prompt Engineering", "Embeddings", "Context Grounding", "Tool Calling", "Human-in-the-Loop AI"] },
   { title: "RAG & NLP", skills: ["RAG", "NLP", "Information Retrieval", "Semantic Search", "Document Parsing", "TF-IDF", "Cosine Similarity", "Sentence Transformers", "Hugging Face"] },
   { title: "Retrieval Stack", skills: ["FAISS", "Vector Search", "BM25", "Cross-Encoder Reranking", "Hybrid Search", "Chunking", "Unstructured Data Processing"] },
   { title: "Frameworks", skills: ["PyTorch", "TensorFlow", "Scikit-learn", "LangChain", "LangGraph", "FastAPI", "Flask", "Joblib", "SQLite", "Supabase"] },
   { title: "Languages", skills: ["Python", "SQL", "JavaScript", "C", "C++", "C#"] },
   { title: "Product UI", skills: ["React", "Vite", "Tailwind CSS", "TypeScript", "Three.js", "GSAP", "REST APIs"] },
-  { title: "Cloud & Enterprise", skills: ["Azure", "AWS", "GCP", "Microsoft 365 Copilot Studio", "Power Automate", "SharePoint", "Teams", "Vercel", "Render"] },
-  { title: "MLOps & Delivery", skills: ["Docker", "CI/CD", "Azure DevSecOps", "Git", "GitHub", "Model Deployment", "Model Serving", "Monitoring", "API Integration"] },
+  { title: "Cloud & Enterprise", skills: ["Azure", "GCP", "BigQuery", "Microsoft 365 Copilot Studio", "Power Automate", "SharePoint", "Teams", "Vercel", "Render"] },
+  { title: "MLOps & Delivery", skills: ["Docker", "Kubernetes Fundamentals", "CI/CD", "Azure DevSecOps", "Git", "GitHub", "Model Deployment", "Model Serving", "Monitoring & Logging", "ML Pipelines", "Inference Optimization", "API Integration"] },
+  { title: "Data Engineering", skills: ["SQL", "BigQuery", "ETL/ELT", "Data Pipelines", "Data Validation", "Feature Engineering"] },
   { title: "IoT & 3D", skills: ["Azure IoT", "Digital Twin", "Raspberry Pi", "Sensors", "VTK.js", "Point Clouds", "3D Evaluation"] },
 ];
 
@@ -1062,11 +1062,16 @@ const motionSystems: MotionSystem[] = [
   },
 ];
 
-const timeline = [
+const timeline: { year: string; title: string; desc: string; details?: string[] }[] = [
+  {
+    year: "2018 - 2022",
+    title: "B.Tech, IET Lucknow",
+    desc: "Chemical Engineering · CGPA 7.8/10.",
+  },
   {
     year: "2023 - 2025",
     title: "M.Tech CSE, NIT Hamirpur",
-    desc: "Focused on AI/ML, Systems, Applied Software Engineering, and Research-oriented problem solving.",
+    desc: "Computer Science and Engineering · CGPA 9.15/10. A foundation in AI/ML, systems, and applied research.",
   },
   {
     year: "2024 - 2025",
@@ -1074,14 +1079,31 @@ const timeline = [
     desc: "Published research on IoT-enabled Digital Twin architecture for smart post-harvest storage monitoring.",
   },
   {
-    year: "Jan 2025 - Mar 2026",
+    year: "Jan 2025 - Feb 2026",
     title: "AI/ML Engineer, Havells India Ltd.",
-    desc: "Built PyTorch prediction models, Tri-Branch PointNet inference pipelines, API-driven AI tools, and stakeholder-facing ML interfaces for engineering teams.",
+    desc: "Turned engineering data into prediction tools that improved accuracy and shortened design cycles.",
+    details: [
+      ...profile.achievements.slice(0, 4),
+      "Owned preprocessing, feature engineering, evaluation, and repeatable inference with PyTorch, Scikit-learn, and Joblib.",
+      "Integrated models into internal applications using FastAPI/Flask services, containerized workflows, and Azure delivery practices.",
+    ],
   },
   {
-    year: "Mar 2026 - Present",
+    year: "Mar 2026 - Aug 2026",
     title: "Senior Engineer - AI/ML, Havells India Ltd.",
-    desc: "Building enterprise GenAI agents, MarketPulse automation with Microsoft 365 Copilot Studio and Power Automate, AI evaluation platforms, RAG workflows, and model-assisted decision tools.",
+    desc: "Delivered GenAI and agent workflows for HR, market intelligence, and internal productivity, with human review built in.",
+    details: [
+      profile.achievements[4],
+      "Built retrieval, memory, tool routing, structured scoring, and reviewer checks into enterprise decision workflows.",
+      "Automated competitor monitoring and reporting with MarketPulse using Copilot Studio, Power Automate, SharePoint, and Teams.",
+      "Worked with product, engineering, and business teams on validation, UAT, fallback flows, logging, and performance improvements.",
+    ],
+  },
+  {
+    year: profile.currentPeriod,
+    title: `${profile.currentRole}, ${profile.employer}`,
+    desc: profile.currentSummary,
+    details: [`Based in ${profile.location}.`, ...profile.currentDetails],
   },
 ];
 
@@ -1395,7 +1417,7 @@ function Hero({ onAsk }: { onAsk: () => void }) {
       <div className="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
         <div>
           <p className="hero-reveal mb-4 inline-block rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
-            Senior AI/ML Engineer | RAG & Agentic AI | Full-Stack AI Developer
+            Senior AI/ML Engineer | RAG & Agentic AI | Full-Stack AI Developer | MLOps
           </p>
 
           <h1 className="hero-reveal mb-6 text-5xl font-bold leading-tight md:text-7xl">
@@ -1404,8 +1426,8 @@ function Hero({ onAsk }: { onAsk: () => void }) {
           </h1>
 
           <p className="hero-reveal text-muted mb-8 max-w-xl text-lg leading-8">
-            3 years building AI agents, RAG systems, NLP products, ML inference tools,
-            enterprise automation, and full-stack AI applications with Python, FastAPI, PyTorch,
+            {profile.experience} building AI agents, RAG systems, NLP products, ML inference tools,
+            enterprise automation, MLOps, and full-stack AI applications with Python, FastAPI, PyTorch,
             LangChain, Microsoft 365 Copilot Studio, Power Automate, React, and Azure.
           </p>
 
@@ -1423,8 +1445,9 @@ function Hero({ onAsk }: { onAsk: () => void }) {
 
           <div className="hero-reveal mt-8 flex flex-wrap gap-3">
             <span className="metric-pill">AI Agents | RAG | NLP</span>
-            <span className="metric-pill">3 Years Experience</span>
+            <span className="metric-pill">{profile.experience} Total Experience</span>
             <span className="metric-pill">Open to AI/ML Roles</span>
+            <span className="metric-pill">{profile.location}</span>
           </div>
         </div>
 
@@ -1681,7 +1704,7 @@ function About() {
   return (
     <section id="about" className="section-pad relative z-10">
       <div className="scroll-reveal mx-auto max-w-6xl">
-        <SectionTitle title="Senior AI/ML Engineer at Havells India Ltd." subtitle="Who I Am" />
+        <SectionTitle title={`${profile.currentRole} at ${profile.employer}`} subtitle="Who I Am" />
         <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]">
           <article className="profile-card glow-card rounded-2xl p-5">
             <div className="profile-photo-frame">
@@ -1691,13 +1714,14 @@ function About() {
             <div className="mt-5">
               <p className="text-xs uppercase tracking-[0.22em] text-cyan-400">Available for AI roles</p>
               <h3 className="mt-2 text-2xl font-bold">Jatin Shukla</h3>
-              <p className="text-muted mt-2 leading-7">AI/ML Engineer building RAG Systems, NLP Products, AI Agents, and Full-Stack AI Tools.</p>
+              <p className="text-muted mt-2 leading-7">AI/ML Engineer building RAG Systems, NLP Products, AI Agents, MLOps, and Full-Stack AI Tools.</p>
+              <p className="text-muted mt-2 text-sm">{profile.location} · {profile.experience} total experience</p>
             </div>
           </article>
 
           <div className="grid gap-5 md:grid-cols-3 lg:grid-cols-1">
             {[
-              ["AI/ML Fields", "Machine Learning, Deep Learning, Model Inference, Model Evaluation, Experimentation, Model Lifecycle Management, and Applied AI Product Engineering."],
+              ["AI/ML Fields", "Machine Learning, Deep Learning, Model Inference, Model Evaluation, Experimentation, Model Lifecycle Management, MLOps, and Applied AI Product Engineering."],
               ["RAG / NLP Fields", "RAG Systems, NLP Pipelines, Information Retrieval, Semantic Search, Document Parsing, and Resume-JD Matching."],
               ["Agentic / Enterprise Fields", "AI Agents, Agentic Workflows, Microsoft 365 Copilot Studio, Power Automate, FastAPI Backends, React Interfaces, and Full-Stack AI Systems."],
             ].map(([title, desc]) => (
@@ -1846,11 +1870,11 @@ function RecruiterHub({ onScheduleInterview }: { onScheduleInterview: () => void
     },
     {
       label: "Experience",
-      items: ["Total Experience: 3 Years", "Current Role: Senior Engineer - AI/ML", "Previous Role: AI/ML Engineer", "Academic Base: M.Tech CSE, NIT Hamirpur"],
+      items: [`Total Experience: ${profile.experience}`, `Current Role: ${profile.currentRole}`, `Company: ${profile.employer}`, `Based in: ${profile.location}`],
     },
     {
       label: "Timeline",
-      items: ["2023 - 2025 | M.Tech CSE", "2024 - 2025 | Research Publication", "Jan 2025 - Mar 2026 | AI/ML Engineer", "Mar 2026 - Present | Senior Engineer - AI/ML"],
+      items: timeline.map((item) => `${item.year} | ${item.title}`),
     },
     {
       label: "Open To",
@@ -1859,7 +1883,7 @@ function RecruiterHub({ onScheduleInterview }: { onScheduleInterview: () => void
     },
     {
       label: "Strongest Areas",
-      items: ["AI Agents and Agentic Workflows", "RAG, NLP, and Semantic Retrieval", "Microsoft 365 Copilot Studio, Power Automate, and FastAPI AI Backends"],
+      items: ["AI Agents and Agentic Workflows", "RAG, NLP, and Semantic Retrieval", "Production ML, MLOps, and FastAPI AI Backends", "BigQuery, Data Pipelines, and Enterprise Automation"],
     },
   ];
 
@@ -1987,6 +2011,14 @@ function Experience() {
               <p className="text-sm font-semibold text-cyan-300">{item.year}</p>
               <h3 className="mt-2 text-2xl font-bold">{item.title}</h3>
               <p className="text-muted mt-3 leading-7">{item.desc}</p>
+              {item.details && (
+                <details className="mt-4">
+                  <summary className="cursor-pointer text-sm font-semibold text-cyan-300">Explore work and impact</summary>
+                  <ul className="text-muted mt-3 list-disc space-y-2 pl-5 text-sm leading-7">
+                    {item.details.map((detail) => <li key={detail}>{detail}</li>)}
+                  </ul>
+                </details>
+              )}
             </article>
           ))}
         </div>
@@ -2240,18 +2272,32 @@ function PortfolioChat({
   setOpen: Dispatch<SetStateAction<boolean>>;
   onOpenProject: (project: Project) => void;
 }) {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<(AssistantAnswer & { role: "assistant" | "user" })[]>([
     {
       role: "assistant",
-      text: "Portfolio assistant online. Ask me about Jatin's AI agents, Market Insight AI Agent, RefundCopilot AI Agent, MarketPulse automation, Copilot Studio, Power Automate, RAG systems, ML experience, resume, contact, interview scheduling, or role fit.",
+      topic: "summary",
+      text: "Ask me about Jatin's current role, experience, achievements, skills, or projects. Start with a quick overview, then ask for details.",
     },
   ]);
   const [input, setInput] = useState("");
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      messagesRef.current?.scrollTo({ top: messagesRef.current.scrollHeight });
+    }
+  }, [messages, open]);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
 
   function submitQuestion(question: string) {
     if (!question.trim()) return;
-    const answer = answerPortfolioQuestion(question);
-    setMessages((prev) => [...prev, { role: "user", text: question }, { role: "assistant", text: answer }]);
+    const previousTopic = messages.findLast((message) => message.role === "assistant")?.topic;
+    const answer = answerPortfolioQuestion(question, { projects, skills: skillGroups, timeline }, previousTopic);
+    setMessages((prev) => [...prev, { role: "user", text: question.trim(), topic: "" }, { role: "assistant", ...answer }]);
     setInput("");
   }
 
@@ -2262,25 +2308,40 @@ function PortfolioChat({
         Ask Assistant
       </button>
       {open && (
-        <aside className="chat-panel">
+        <aside className="chat-panel" aria-label="Portfolio assistant" onKeyDown={(event) => { if (event.key === "Escape") setOpen(false); }}>
           <div className="flex items-center justify-between border-b border-cyan-400/15 p-4">
             <div>
               <h2 className="font-bold">Portfolio Assistant</h2>
-              <p className="text-xs text-muted">AI-style personal assistant for Jatin's profile</p>
+              <p className="text-xs text-muted">Answers from Jatin's portfolio and experience</p>
             </div>
             <button onClick={() => setOpen(false)} className="icon-button" aria-label="Close chat">
               X
             </button>
           </div>
-          <div className="chat-messages">
+          <div className="chat-messages" ref={messagesRef} role="log" aria-label="Conversation" aria-live="polite">
             {messages.map((message, index) => (
               <div key={`${message.role}-${index}`} className={`chat-bubble ${message.role === "assistant" ? "assistant" : "user"}`}>
-                {message.text}
+                <p className="whitespace-pre-line">{message.text}</p>
+                {message.links && <div className="mt-3 flex flex-wrap gap-3">
+                  {message.links.map((link) => link.href.startsWith("project:") ? (
+                    <button key={link.href} className="text-sm font-semibold text-cyan-300 underline" onClick={() => {
+                      const project = projects.find((item) => item.id === link.href.slice(8));
+                      if (project) { setOpen(false); onOpenProject(project); }
+                    }}>{link.label}</button>
+                  ) : (
+                    <a key={link.href} className="text-sm font-semibold text-cyan-300 underline" href={link.href}
+                      download={link.href === resumePath || undefined}
+                      target={link.href.startsWith("https:") ? "_blank" : undefined}
+                      rel={link.href.startsWith("https:") ? "noreferrer" : undefined}
+                      onClick={() => { if (link.href.startsWith("#")) setOpen(false); }}
+                    >{link.label}</a>
+                  ))}
+                </div>}
               </div>
             ))}
           </div>
           <div className="flex flex-wrap gap-2 px-4 pb-3">
-            {["What AI projects has Jatin built?", "Tell me about RefundCopilot AI Agent", "Tell me about Market Insight AI Agent", "Does Jatin know Copilot Studio?", "Does Jatin know RAG?", "Schedule an interview"].map((question) => (
+            {["Current role?", "Havells experience?", "Key achievements?", "AI projects?", "MLOps skills?", "Tell me more"].map((question) => (
               <button key={question} onClick={() => submitQuestion(question)} className="quick-question">
                 {question}
               </button>
@@ -2293,8 +2354,8 @@ function PortfolioChat({
               submitQuestion(input);
             }}
           >
-            <input className="input-field" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about Jatin..." />
-            <button className="primary-button small-button" type="submit">
+            <input ref={inputRef} className="input-field" aria-label="Your question" maxLength={1000} value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about Jatin..." />
+            <button className="primary-button small-button" type="submit" disabled={!input.trim()}>
               Send
             </button>
           </form>
@@ -2646,156 +2707,6 @@ function getProjectPreviewLabel(project: Project) {
   if (project.id === "code-review-bot") return "Workflow demo preview";
   if (project.video) return "Demo video preview";
   return "Platform preview";
-}
-
-function getQuestionSignals(question: string) {
-  const normalized = question.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-  const tokens = normalized.split(/\s+/).filter(Boolean);
-  const compact = tokens.join("");
-
-  return { normalized, tokens, compact };
-}
-
-function hasApproxTerm(
-  signals: ReturnType<typeof getQuestionSignals>,
-  terms: string[],
-  maxDistance = 1,
-) {
-  return terms.some((term) => {
-    const normalizedTerm = term.toLowerCase().replace(/[^a-z0-9]+/g, "");
-
-    return (
-      signals.normalized.includes(term.toLowerCase()) ||
-      signals.compact.includes(normalizedTerm) ||
-      signals.tokens.some((token) => editDistance(token, normalizedTerm) <= maxDistance)
-    );
-  });
-}
-
-function editDistance(left: string, right: string) {
-  if (left === right) return 0;
-  if (!left.length) return right.length;
-  if (!right.length) return left.length;
-
-  const previous = Array.from({ length: right.length + 1 }, (_, index) => index);
-  const current = Array(right.length + 1).fill(0);
-
-  for (let i = 1; i <= left.length; i += 1) {
-    current[0] = i;
-    for (let j = 1; j <= right.length; j += 1) {
-      const substitutionCost = left[i - 1] === right[j - 1] ? 0 : 1;
-      current[j] = Math.min(
-        current[j - 1] + 1,
-        previous[j] + 1,
-        previous[j - 1] + substitutionCost,
-      );
-    }
-    previous.splice(0, previous.length, ...current);
-  }
-
-  return previous[right.length];
-}
-
-function answerPortfolioQuestion(question: string) {
-  const q = question.toLowerCase();
-  const signals = getQuestionSignals(question);
-  const asksCodeReviewBot =
-    hasApproxTerm(signals, ["code review bot", "code reviewer", "review bot", "pull request review", "pr review", "agentic ai code review bot"], 2) ||
-    ((q.includes("code review") || q.includes("pull request")) && (q.includes("bot") || q.includes("github") || q.includes("review")));
-  const asksAgentFlow = hasApproxTerm(signals, ["agentflow", "agent flow", "agentfow", "multi-agent", "multiagent", "agentic", "orchestration"], 2);
-  const asksMarketInsight =
-    hasApproxTerm(signals, ["market insight", "market-insight", "stock market", "stock analysis"], 2) ||
-    q.includes("yfinance") ||
-    q.includes("stock");
-  const asksHireFit =
-    hasApproxTerm(signals, ["hirefit", "hire fit", "resume matcher", "resume jd", "jd matching"], 2) ||
-    q.includes("job description") ||
-    q.includes("ats") ||
-    q.includes("jd match");
-  const asksNexora = hasApproxTerm(signals, ["nexora"], 1) || q.includes("rag") || q.includes("pdf") || q.includes("bm25") || q.includes("faiss");
-  const asksAutomation =
-    hasApproxTerm(signals, ["marketpulse", "market pulse", "copilot studio", "power automate", "sharepoint", "microsoft 365", "teams automation"], 2) ||
-    q.includes("automation");
-  const asksRefundCopilot = hasApproxTerm(signals, ["refundcopilot", "refund copilot", "refundpilot", "refund pilot", "refund agent", "refund policy"], 2);
-
-  if (
-    q.includes("contact") ||
-    q.includes("email") ||
-    q.includes("mail") ||
-    q.includes("phone") ||
-    q.includes("mobile") ||
-    q.includes("number") ||
-    q.includes("no.") ||
-    q.includes("call") ||
-    q.includes("reach") ||
-    q.includes("linkedin") ||
-    q.includes("interview") ||
-    q.includes("schedule")
-  ) {
-    return `Contact Jatin at ${phone} or ${email}. For interviews, use the Interview tab in the contact form so role, company, preferred time, and message are emailed directly. LinkedIn: ${linkedInUrl}. GitHub: ${githubUrl}.`;
-  }
-
-  if (q.includes("resume") || q.includes("cv")) {
-    return "Jatin's latest resume is available from the Download Resume buttons on the portfolio. It highlights 3 years of AI/ML experience, GenAI and agent systems, RAG, ML inference, Microsoft 365 Copilot Studio, Power Automate, Azure, cloud deployment, and enterprise automation work.";
-  }
-
-  if (asksCodeReviewBot) {
-    return "Agentic AI Code Review Bot is Jatin's multi-agent GitHub pull request reviewer. It fetches live PR diffs, runs specialist review agents for bugs, security, code quality, and missing tests, then produces structured findings, PR risk scoring, comment previews, review history, and human-reviewable autofix patch drafts.";
-  }
-
-  if (asksAgentFlow) {
-    return "AgentFlow is Jatin's full-stack multi-agent AI orchestration platform built with FastAPI, LangGraph, LangChain, React, SQLite, Vite, and Tailwind. It includes semantic memory with optional embeddings and lexical fallback, SSE workflow streaming, role-configurable Groq/OpenAI/Ollama providers, Wikipedia and arXiv research tools, reviewer scoring, optional human-review webhooks, workspace isolation, direct chat, and searchable/exportable run history. The deployed API also uses retries, rate limits, request IDs, structured logs, and SQLite WAL mode. Live demo: https://agent-flow-five-phi.vercel.app";
-  }
-
-  if (asksMarketInsight) {
-    return "Market Insight AI Agent is Jatin's full-stack agentic stock research assistant. It uses a FastAPI backend, LangGraph tool-calling workflow, yFinance market data, Groq explanations, a Next.js dashboard, Recharts-based historical price visualization, streaming responses, and visible tool traces so stock insights stay grounded in fetched financial data.";
-  }
-
-  if (asksHireFit) {
-    return "HireFit is an applicant-focused NLP resume-JD matcher. It uses resume/JD parsing, NLP preprocessing, TF-IDF, cosine similarity, skill-gap analysis, ATS keyword audit, and Gemini-based explanation to help applicants improve role fit before applying.";
-  }
-
-  if (asksRefundCopilot) {
-    return "RefundCopilot AI Agent is Jatin's policy-grounded refund support agent. It uses FastAPI, React, SQLite, Docker, deterministic refund-policy checks, prompt-injection detection, approve/deny/escalate actions, and admin traces with tool calls, reason codes, and trace IDs.";
-  }
-
-  if (q.includes("project") || q.includes("built") || q.includes("case stud")) {
-    return "Jatin's featured AI projects include AgentFlow for multi-agent orchestration, Market Insight AI Agent for grounded stock research, RefundCopilot AI Agent for policy-grounded support automation, Agentic AI Code Review Bot for GitHub PR review automation, HireFit for NLP resume-JD matching, Nexora for RAG study workflows, and IoT Digital Twin research.";
-  }
-
-  if (asksNexora) {
-    return "Yes. Jatin has strong RAG experience through Nexora: PDF/URL ingestion, chunking, FAISS + BM25 retrieval, Cross-Encoder reranking, and LLM-based answers and quiz generation.";
-  }
-
-  if (asksAutomation) {
-    return "Yes. Jatin has enterprise automation experience with Microsoft 365 Copilot Studio, Power Automate, SharePoint, and Teams. His MarketPulse work automates competitor monitoring, validation flows, Teams alerts, weekly digests, and monthly leadership reports.";
-  }
-
-  if (q.includes("ml") || q.includes("machine") || q.includes("pytorch") || q.includes("tensorflow") || q.includes("experience")) {
-    return "Jatin has 3 years of total AI/ML experience across Senior Engineer - AI/ML, AI/ML Engineer, M.Tech research, GenAI agents, RAG products, ML inference tools, FastAPI backends, React interfaces, Microsoft 365 automation, and IoT Digital Twin research.";
-  }
-
-  if (q.includes("role") || q.includes("hire") || q.includes("why") || q.includes("fit")) {
-    return "Best-fit roles for Jatin include Senior AI/ML Engineer, AI/ML Engineer, Agentic AI Engineer, RAG Engineer, NLP Engineer, Applied AI Engineer, and Full-Stack AI Developer roles.";
-  }
-
-  if (q.includes("research") || q.includes("digital twin") || q.includes("iot")) {
-    return "Jatin's research/project work includes an IoT Digital Twin for smart post-harvest storage using Raspberry Pi sensors, Azure IoT Hub, digital twin modeling, and ML-oriented monitoring.";
-  }
-
-  if (q.includes("education") || q.includes("degree") || q.includes("m.tech") || q.includes("mtech") || q.includes("cgpa") || q.includes("nit")) {
-    return "Jatin completed an M.Tech in Computer Science and Engineering from NIT Hamirpur with a 9.15/10 CGPA, and a B.Tech in Chemical Engineering from IET Lucknow with a 7.8/10 CGPA.";
-  }
-
-  if (q.includes("cloud") || q.includes("azure") || q.includes("aws") || q.includes("gcp") || q.includes("deployment")) {
-    return "Jatin works across Azure, AWS, GCP, Vercel, Render, Supabase, Docker, CI/CD, Azure DevSecOps, FastAPI deployment, model serving, monitoring, and API integration.";
-  }
-
-  if (q.includes("skill") || q.includes("tech")) {
-    return "Jatin's toolkit includes Python, SQL, JavaScript, C, C++, C#, PyTorch, TensorFlow, Scikit-learn, ML, DL, NLP, RAG, GenAI, AI agents, LangGraph, LangChain, LlamaIndex, Groq, Hugging Face, FAISS, BM25, Cross-Encoder reranking, FastAPI, Flask, React, Docker, Azure, AWS, GCP, Microsoft 365 Copilot Studio, Power Automate, SharePoint, Teams, Vercel, Render, Git, and GitHub.";
-  }
-
-  return "Portfolio summary: Jatin is a Senior AI/ML Engineer focused on AI agents, multi-agent platforms, enterprise automation, grounded finance AI, RAG, NLP, ML inference systems, and full-stack AI products. Try asking about Market Insight AI Agent, RefundCopilot AI Agent, AgentFlow, MarketPulse automation, Copilot Studio, HireFit, Nexora, skills, experience, roles, or contact.";
 }
 
 function scrollToId(id: string) {

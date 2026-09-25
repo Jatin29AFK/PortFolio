@@ -8,11 +8,22 @@ This portfolio is designed to feel like an AI product, not a static resume site.
 
 https://port-folio-alpha-black.vercel.app
 
+## Current Profile
+
+- 3+ years of total experience across applied AI/ML and research
+- Senior Executive - AI, JB Emporium India | Sep 2026 - Present | Gurugram
+- Senior Engineer - AI/ML, Havells India Ltd. | Mar 2026 - Aug 2026
+- AI/ML Engineer, Havells India Ltd. | Jan 2025 - Feb 2026
+- Brief experience summaries with expandable work and achievement details
+- Production ML, MLOps, GenAI, retrieval, and enterprise AI/data workflows
+- Latest resume available through the existing download buttons
+
 ## Live Focus
 
 - AI/ML engineering profile
 - RAG and NLP project showcase
-- Agentic AI and full-stack AI positioning
+- Agentic AI, MLOps, and full-stack AI positioning
+- BigQuery, data pipelines, validation, Azure, and GCP
 - Microsoft 365 Copilot Studio and Power Automate automation positioning
 - Detailed case-study presentation
 - Research publication and system-design thinking
@@ -20,7 +31,7 @@ https://port-folio-alpha-black.vercel.app
 ## Highlights
 
 - Interactive 3D AI hero scene built with React Three Fiber and Drei
-- AI-style "Ask My Portfolio" assistant for quick portfolio queries
+- Portfolio assistant with current-role answers, contextual follow-ups, and links to experience, project case studies, contact, and the resume
 - Project case studies with detailed workflows, concepts, tech stack, and reasoning
 - Contact and interview-request form backed by Resend email delivery
 - FormSubmit fallback for contact and interview requests when Resend is not configured
@@ -188,6 +199,14 @@ npm run build
 npm run lint
 ```
 
+## Assistant checks
+
+The assistant answers from local profile data and existing project descriptions; it does not require an LLM API key. Project questions open the corresponding case study, and short follow-ups retain the previous topic.
+
+```bash
+node --test tests/portfolioAssistant.test.mjs
+```
+
 ## Deployment
 
 This portfolio is intended to be deployed on Vercel.
@@ -223,8 +242,8 @@ Instead of behaving like a normal portfolio or resume page, this project present
 ## Contact
 
 Jatin Shukla  
-Senior AI/ML Engineer  
-Noida, India
+Senior Executive - AI, JB Emporium India<br>
+Gurugram, India
 
 - Email: shukla.jeetu2550@gmail.com
 - LinkedIn: https://www.linkedin.com/in/jatin-shukla-401739202/

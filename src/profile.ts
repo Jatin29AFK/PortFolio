@@ -1,0 +1,26 @@
+export const profile = {
+  name: "Jatin Shukla",
+  experience: "3+ years",
+  location: "Gurugram, India",
+  currentRole: "Senior Executive - AI",
+  employer: "JB Emporium India",
+  currentPeriod: "Sep 2026 - Present",
+  currentSummary: "Building AI and data tools that make enterprise sourcing and product decisions easier to explore, validate, and act on.",
+  currentDetails: [
+    "Turn scattered business data into searchable, traceable information using Python, SQL, BigQuery, and LLM tools.",
+    "Build retrieval and agent workflows with clear filters, validation checks, and links back to the source.",
+    "Work with business teams to turn open-ended requirements into testable AI prototypes and practical product workflows.",
+  ],
+  achievements: [
+    "18–22% higher prediction accuracy for fan air delivery, velocity, and pressure.",
+    "35% faster design evaluation through LED thermal-prediction pipelines.",
+    "35% lower end-to-end latency for Tri-Branch PointNet inference.",
+    "ML tools adopted by 30+ engineers through internal applications and APIs.",
+    "4+ GenAI and agentic solutions, reducing manual research and screening effort by 40%+.",
+  ],
+  resumePath: "/Resume/JatinShukla_resume.pdf",
+  email: "shukla.jeetu2550@gmail.com",
+  phone: "+91-9116237146",
+  githubUrl: "https://github.com/Jatin29AFK",
+  linkedInUrl: "https://www.linkedin.com/in/jatin-shukla-401739202/",
+};
